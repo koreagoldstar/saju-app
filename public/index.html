@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
     <style>
       @font-face {
         font-family: "GmarketSans";
@@ -16,89 +17,96 @@
       }
 
       :root {
-        --wood: #b8e6c8;
-        --fire: #ffc9b9;
-        --earth: #ffe4b8;
-        --metal: #e3e6ef;
-        --water: #bfdcff;
+        --wood: #7ce7a2;
+        --fire: #ff8f8f;
+        --earth: #ffd18a;
+        --metal: #c5d1e6;
+        --water: #74b7ff;
       }
 
       body {
         font-family: "GmarketSans", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: radial-gradient(circle at 10% 20%, #1d2b64 0%, transparent 35%),
+                    radial-gradient(circle at 90% 0%, #5d1f7a 0%, transparent 35%),
+                    linear-gradient(135deg, #0b1020 0%, #141b34 55%, #1a1730 100%);
       }
 
-      .glass {
-        background: rgba(255, 255, 255, 0.16);
-        border: 1px solid rgba(255, 255, 255, 0.22);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        box-shadow: 0 20px 60px rgba(22, 40, 90, 0.15);
+      .glass-dark {
+        background: rgba(17, 24, 39, 0.58);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
       }
 
-      .icon-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
+      .chip {
+        border-radius: 9999px;
+        padding: 0.45rem 0.85rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        color: #0f172a;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45), 0 4px 16px rgba(0, 0, 0, 0.22);
       }
     </style>
   </head>
-  <body class="min-h-screen text-slate-800 bg-gradient-to-br from-sky-100 via-indigo-100 to-emerald-100">
-    <div class="pointer-events-none fixed -left-24 top-8 h-80 w-80 rounded-full bg-cyan-200/40 blur-3xl"></div>
-    <div class="pointer-events-none fixed bottom-0 right-0 h-96 w-96 rounded-full bg-violet-200/40 blur-3xl"></div>
+  <body class="min-h-screen text-slate-100">
+    <div class="pointer-events-none fixed -left-24 top-8 h-80 w-80 rounded-full bg-cyan-400/20 blur-3xl"></div>
+    <div class="pointer-events-none fixed bottom-0 right-0 h-96 w-96 rounded-full bg-violet-500/20 blur-3xl"></div>
 
-    <main class="relative mx-auto w-full max-w-6xl px-4 py-10 md:px-8">
-      <section class="glass rounded-3xl p-8">
-        <p class="text-xs uppercase tracking-[0.22em] text-indigo-500">Saju Healing Insight</p>
-        <h1 class="mt-2 text-3xl font-bold text-slate-800 md:text-4xl">사주 만세력 & AI 힐링 리포트</h1>
-        <p class="mt-3 text-slate-600">차분한 명상 앱 스타일로, 사주 8자와 해석을 편안하게 확인해보세요.</p>
+    <main id="app-root" class="relative mx-auto w-full max-w-6xl px-4 py-10 md:px-8 opacity-0">
+      <section class="glass-dark rounded-3xl p-8">
+        <p class="text-xs uppercase tracking-[0.22em] text-indigo-300">Saju Healing Insight</p>
+        <h1 class="mt-2 text-3xl font-bold text-slate-100 md:text-4xl">사주 만세력 & AI 힐링 리포트</h1>
+        <p class="mt-3 text-slate-300">깊이 있는 사주 해석을 다크 모드 감성의 고급 UI로 확인해보세요.</p>
       </section>
 
       <section class="mt-6 grid gap-6 lg:grid-cols-2">
-        <div class="glass rounded-3xl p-6">
-          <h2 class="text-xl font-semibold text-slate-800 icon-badge"><i data-lucide="clipboard-pen-line" class="h-5 w-5 text-indigo-500"></i>입력 폼</h2>
+        <div id="input-card" class="glass-dark rounded-3xl p-6">
+          <h2 class="text-xl font-semibold text-slate-100 inline-flex items-center gap-2"><i data-lucide="clipboard-pen-line" class="h-5 w-5 text-indigo-300"></i>입력 폼</h2>
           <form id="saju-form" class="mt-5 space-y-4">
             <div>
-              <label class="mb-1 block text-sm text-slate-600 icon-badge"><i data-lucide="user-round" class="h-4 w-4 text-indigo-400"></i>이름</label>
-              <input name="name" required class="w-full rounded-xl border border-white/40 bg-white/70 px-4 py-3 outline-none transition focus:border-indigo-300" />
+              <label class="mb-1 block text-sm text-slate-300 inline-flex items-center gap-2"><i data-lucide="user-round" class="h-4 w-4 text-indigo-300"></i>이름</label>
+              <input name="name" required class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3 text-slate-100 outline-none transition focus:border-indigo-400" />
             </div>
             <div>
-              <label class="mb-1 block text-sm text-slate-600 icon-badge"><i data-lucide="calendar-days" class="h-4 w-4 text-indigo-400"></i>생년월일</label>
-              <input type="date" name="birthDate" required class="w-full rounded-xl border border-white/40 bg-white/70 px-4 py-3 outline-none transition focus:border-indigo-300" />
+              <label class="mb-1 block text-sm text-slate-300 inline-flex items-center gap-2"><i data-lucide="calendar-days" class="h-4 w-4 text-indigo-300"></i>생년월일</label>
+              <input type="date" name="birthDate" required class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3 text-slate-100 outline-none transition focus:border-indigo-400" />
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="mb-1 block text-sm text-slate-600 icon-badge"><i data-lucide="clock-3" class="h-4 w-4 text-indigo-400"></i>태어난 시</label>
-                <input type="number" name="birthHour" min="0" max="23" required class="w-full rounded-xl border border-white/40 bg-white/70 px-4 py-3 outline-none transition focus:border-indigo-300" />
+                <label class="mb-1 block text-sm text-slate-300 inline-flex items-center gap-2"><i data-lucide="clock-3" class="h-4 w-4 text-indigo-300"></i>태어난 시</label>
+                <input type="number" name="birthHour" min="0" max="23" required class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3 text-slate-100 outline-none transition focus:border-indigo-400" />
               </div>
               <div>
-                <label class="mb-1 block text-sm text-slate-600 icon-badge"><i data-lucide="clock-9" class="h-4 w-4 text-indigo-400"></i>태어난 분</label>
-                <input type="number" name="birthMinute" min="0" max="59" required class="w-full rounded-xl border border-white/40 bg-white/70 px-4 py-3 outline-none transition focus:border-indigo-300" />
+                <label class="mb-1 block text-sm text-slate-300 inline-flex items-center gap-2"><i data-lucide="clock-9" class="h-4 w-4 text-indigo-300"></i>태어난 분</label>
+                <input type="number" name="birthMinute" min="0" max="59" required class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3 text-slate-100 outline-none transition focus:border-indigo-400" />
               </div>
             </div>
             <div>
-              <label class="mb-1 block text-sm text-slate-600 icon-badge"><i data-lucide="venus-and-mars" class="h-4 w-4 text-indigo-400"></i>성별</label>
-              <select name="gender" required class="w-full rounded-xl border border-white/40 bg-white/70 px-4 py-3 outline-none transition focus:border-indigo-300">
+              <label class="mb-1 block text-sm text-slate-300 inline-flex items-center gap-2"><i data-lucide="venus-and-mars" class="h-4 w-4 text-indigo-300"></i>성별</label>
+              <select name="gender" required class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3 text-slate-100 outline-none transition focus:border-indigo-400">
                 <option value="">선택</option>
                 <option value="male">남성</option>
                 <option value="female">여성</option>
               </select>
             </div>
             <div class="grid grid-cols-2 gap-3">
-              <label class="flex items-center gap-2 rounded-xl border border-white/40 bg-white/70 px-4 py-3">
+              <label class="flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3">
                 <input type="radio" name="calendarType" value="solar" checked />
                 <span>양력</span>
               </label>
-              <label class="flex items-center gap-2 rounded-xl border border-white/40 bg-white/70 px-4 py-3">
+              <label class="flex items-center gap-2 rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3">
                 <input type="radio" name="calendarType" value="lunar" />
                 <span>음력</span>
               </label>
             </div>
-            <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-500 px-4 py-3 font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:bg-indigo-300 icon-badge justify-center">
+            <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-500 px-4 py-3 font-semibold text-white transition hover:bg-indigo-400 disabled:cursor-not-allowed disabled:bg-indigo-800 inline-flex items-center justify-center gap-2">
               <i data-lucide="sparkles" class="h-4 w-4"></i>
               사주 결과 보기
             </button>
 
-            <div id="loading-wrap" class="hidden rounded-xl border border-white/40 bg-white/60 p-3">
+            <div id="loading-wrap" class="hidden rounded-xl border border-slate-600 bg-slate-900/70 p-3">
               <div class="flex items-center gap-3">
                 <lottie-player
                   src="https://assets2.lottiefiles.com/packages/lf20_j1adxtyb.json"
@@ -108,46 +116,37 @@
                   loop
                   autoplay
                 ></lottie-player>
-                <p id="loading-text" class="text-sm text-indigo-600">해석 중입니다... 잠시만 기다려주세요.</p>
+                <p id="loading-text" class="text-sm text-indigo-300">해석 중입니다... 잠시만 기다려주세요.</p>
               </div>
             </div>
           </form>
         </div>
 
-        <div class="glass rounded-3xl p-6">
-          <h2 class="text-xl font-semibold text-slate-800 icon-badge"><i data-lucide="moon-star" class="h-5 w-5 text-indigo-500"></i>결과</h2>
-          <p id="empty-message" class="mt-5 text-slate-600">입력 후 결과가 여기에 표시됩니다.</p>
+        <div id="result-card" class="glass-dark rounded-3xl p-6">
+          <h2 class="text-xl font-semibold text-slate-100 inline-flex items-center gap-2"><i data-lucide="moon-star" class="h-5 w-5 text-indigo-300"></i>결과</h2>
+          <p id="empty-message" class="mt-5 text-slate-300">입력 후 결과가 여기에 표시됩니다.</p>
 
-          <div class="mt-4 rounded-2xl border border-white/40 bg-white/55 p-4">
-            <p class="text-xs font-semibold text-slate-500">오행 파스텔 팔레트</p>
-            <div class="mt-3 grid grid-cols-5 gap-2 text-xs font-medium">
-              <span class="rounded-lg px-2 py-2 text-center" style="background: var(--wood)">목</span>
-              <span class="rounded-lg px-2 py-2 text-center" style="background: var(--fire)">화</span>
-              <span class="rounded-lg px-2 py-2 text-center" style="background: var(--earth)">토</span>
-              <span class="rounded-lg px-2 py-2 text-center" style="background: var(--metal)">금</span>
-              <span class="rounded-lg px-2 py-2 text-center" style="background: var(--water)">수</span>
-            </div>
-          </div>
-
-          <div id="result-content" class="mt-5 hidden space-y-4">
-            <p id="profile-line" class="text-sm text-slate-600"></p>
-            <p id="calendar-line" class="text-sm text-slate-600"></p>
-            <p id="provider-line" class="text-xs text-slate-500"></p>
+          <div id="result-content" class="mt-5 hidden space-y-4 opacity-0">
+            <p id="profile-line" class="text-sm text-slate-300"></p>
+            <p id="calendar-line" class="text-sm text-slate-300"></p>
+            <p id="provider-line" class="text-xs text-slate-400"></p>
 
             <div class="grid grid-cols-2 gap-3">
-              <div class="rounded-2xl p-4" style="background: var(--wood)"><p class="text-xs text-slate-600">연주</p><p id="year-pillar" class="text-2xl font-bold"></p></div>
-              <div class="rounded-2xl p-4" style="background: var(--fire)"><p class="text-xs text-slate-600">월주</p><p id="month-pillar" class="text-2xl font-bold"></p></div>
-              <div class="rounded-2xl p-4" style="background: var(--earth)"><p class="text-xs text-slate-600">일주</p><p id="day-pillar" class="text-2xl font-bold"></p></div>
-              <div class="rounded-2xl p-4" style="background: var(--water)"><p class="text-xs text-slate-600">시주</p><p id="time-pillar" class="text-2xl font-bold"></p></div>
+              <div class="rounded-2xl p-4" style="background: color-mix(in srgb, var(--wood) 28%, #0f172a 72%)"><p class="text-xs text-slate-300">연주</p><p id="year-pillar" class="text-2xl font-bold text-white"></p></div>
+              <div class="rounded-2xl p-4" style="background: color-mix(in srgb, var(--fire) 28%, #0f172a 72%)"><p class="text-xs text-slate-300">월주</p><p id="month-pillar" class="text-2xl font-bold text-white"></p></div>
+              <div class="rounded-2xl p-4" style="background: color-mix(in srgb, var(--earth) 28%, #0f172a 72%)"><p class="text-xs text-slate-300">일주</p><p id="day-pillar" class="text-2xl font-bold text-white"></p></div>
+              <div class="rounded-2xl p-4" style="background: color-mix(in srgb, var(--water) 28%, #0f172a 72%)"><p class="text-xs text-slate-300">시주</p><p id="time-pillar" class="text-2xl font-bold text-white"></p></div>
             </div>
 
-            <div class="rounded-2xl border border-white/50 bg-white/65 p-4">
-              <p class="text-xs text-slate-500">사주 8자</p>
-              <p id="eight-char" class="mt-1 text-lg font-semibold"></p>
+            <div class="rounded-2xl border border-slate-600 bg-slate-900/70 p-4">
+              <p class="text-xs text-slate-400">사주 8자 오행 칩</p>
+              <div id="eight-char-chips" class="mt-2 flex flex-wrap gap-2"></div>
+              <p id="eight-char" class="mt-3 text-lg font-semibold text-slate-100"></p>
             </div>
-            <div class="rounded-2xl border border-white/50 bg-white/65 p-4">
-              <p class="text-xs text-slate-500">AI 운세 풀이</p>
-              <p id="ai-fortune" class="mt-2 leading-7 text-slate-700"></p>
+
+            <div class="rounded-2xl border border-slate-600 bg-slate-900/70 p-4">
+              <p class="text-xs text-slate-400">AI 운세 풀이</p>
+              <p id="ai-fortune" class="mt-2 leading-7 text-slate-200"></p>
             </div>
           </div>
         </div>
@@ -160,11 +159,44 @@
       const resultContent = document.getElementById("result-content");
       const submitBtn = document.getElementById("submit-btn");
       const loadingWrap = document.getElementById("loading-wrap");
+      const chipsWrap = document.getElementById("eight-char-chips");
+
+      const fiveColorMap = [
+        { key: "목", color: "var(--wood)" },
+        { key: "화", color: "var(--fire)" },
+        { key: "토", color: "var(--earth)" },
+        { key: "금", color: "var(--metal)" },
+        { key: "수", color: "var(--water)" },
+      ];
 
       function setLoading(isLoading) {
         submitBtn.disabled = isLoading;
         submitBtn.textContent = isLoading ? "해석 중..." : "사주 결과 보기";
         loadingWrap.classList.toggle("hidden", !isLoading);
+      }
+
+      function renderEightCharChips(eightCharText) {
+        chipsWrap.innerHTML = "";
+        const parts = (eightCharText || "").split(" ").filter(Boolean);
+        parts.forEach((pillar, idx) => {
+          const chip = document.createElement("span");
+          chip.className = "chip";
+          chip.textContent = pillar;
+          chip.style.background = fiveColorMap[idx % fiveColorMap.length].color;
+          chipsWrap.appendChild(chip);
+        });
+      }
+
+      function runEntryAnimation() {
+        if (!window.motion) return;
+        motion.animate("#app-root", { opacity: [0, 1], y: [20, 0] }, { duration: 0.7, easing: "ease-out" });
+        motion.animate("#input-card", { opacity: [0, 1], x: [-16, 0] }, { duration: 0.6, delay: 0.15, easing: "ease-out" });
+        motion.animate("#result-card", { opacity: [0, 1], x: [16, 0] }, { duration: 0.6, delay: 0.2, easing: "ease-out" });
+      }
+
+      function runResultAnimation() {
+        if (!window.motion) return;
+        motion.animate("#result-content", { opacity: [0, 1], y: [12, 0] }, { duration: 0.45, easing: "ease-out" });
       }
 
       form.addEventListener("submit", async (event) => {
@@ -208,6 +240,8 @@
           document.getElementById("time-pillar").textContent = data.saju.timePillar;
           document.getElementById("eight-char").textContent = data.saju.eightChar;
           document.getElementById("ai-fortune").textContent = data.aiFortune;
+          renderEightCharChips(data.saju.eightChar);
+          runResultAnimation();
         } catch (error) {
           alert(error.message);
         } finally {
@@ -216,9 +250,8 @@
         }
       });
 
-      if (window.lucide) {
-        window.lucide.createIcons();
-      }
+      if (window.lucide) window.lucide.createIcons();
+      runEntryAnimation();
     </script>
   </body>
 </html>
