@@ -3,7 +3,7 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const { getSajuFromInput } = require("./lib/saju");
-const { getClaudeSajuFortune } = require("./lib/claude");
+const { getClaudeSajuFortune, normalizeCategory, CATEGORY_LABELS } = require("./lib/claude");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,38 +17,37 @@ app.use((req, res, next) => {
 });
 app.use(express.static(path.join(__dirname, "public"), { etag: false, lastModified: false }));
 
-function buildAiFortune(data) {
-  const name = data.name;
-  const gender = data.gender;
-  const saju = data.saju;
-  const styleLine =
-    gender === "female"
-      ? "섬세함과 공감력이 강점으로 드러나는 흐름입니다."
-      : "추진력과 결단력이 강점으로 드러나는 흐름입니다.";
+function buildFallbackFortune(data) {
+  const category = normalizeCategory(data.category);
+  const categoryLabel = CATEGORY_LABELS[category];
+  const map = {
+    love: "서두르지 않고 감정을 차분히 전달하면 관계 흐름이 좋아집니다.",
+    business: "새 제안은 이익 구조와 리스크를 먼저 점검하면 안정적입니다.",
+    benefactor: "주변 조언 속에 결정적 힌트가 있으니 열린 태도가 유리합니다.",
+    career: "업무 우선순위를 명확히 하면 평가와 성과가 동시에 좋아집니다.",
+    wealth: "작은 지출을 관리하면 금전운이 빠르게 회복되는 날입니다.",
+  };
 
   return [
-    name + "님의 사주는 " + saju.dayPillar + " 일주를 중심으로 균형이 좋은 편입니다.",
-    styleLine,
-    "최근에는 " + saju.monthPillar + " 기운이 강해 학습, 계획, 커리어 정비에 유리합니다.",
-    "이번 달은 인간관계에서 속도를 조절하면 더 큰 성과를 얻을 수 있습니다.",
+    data.name + "님의 오늘 " + categoryLabel + "은 " + data.saju.dayPillar + " 기운이 중심입니다.",
+    map[category],
+    "오늘의 팁: 중요한 결론은 한 번 더 확인한 뒤 진행하세요.",
   ].join(" ");
 }
 
 app.post("/api/saju", async (req, res) => {
   try {
-    const { name, birthDate, birthHour, birthMinute, gender, calendarType } = req.body;
+    const { name, birthDate, birthHour, birthMinute, gender, calendarType, category } = req.body || {};
 
     if (!name || !birthDate || birthHour === undefined || birthMinute === undefined || !gender || !calendarType) {
       return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
     }
 
-    const parts = birthDate.split("-").map(Number);
-    const year = parts[0];
-    const month = parts[1];
-    const day = parts[2];
+    const [year, month, day] = birthDate.split("-").map(Number);
     const hour = Number(birthHour);
     const minute = Number(birthMinute);
     const isLunar = calendarType === "lunar";
+    const normalizedCategory = normalizeCategory(category);
 
     const saju = getSajuFromInput(year, month, day, hour, minute, isLunar);
 
@@ -60,20 +59,19 @@ app.post("/api/saju", async (req, res) => {
         name,
         gender,
         calendarType,
+        category: normalizedCategory,
         ...saju,
       });
     } catch (apiError) {
       aiProvider = "fallback";
-      aiFortune = buildAiFortune({ name, gender, saju });
+      aiFortune = buildFallbackFortune({ name, gender, saju, category: normalizedCategory });
       console.error("Claude API fallback:", apiError.message);
     }
 
     return res.json({
-      profile: {
-        name,
-        gender,
-        calendarType,
-      },
+      profile: { name, gender, calendarType },
+      category: normalizedCategory,
+      categoryLabel: CATEGORY_LABELS[normalizedCategory],
       saju,
       aiProvider,
       aiFortune,

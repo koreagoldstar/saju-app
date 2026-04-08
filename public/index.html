@@ -1,150 +1,137 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>안보면 니 손해</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
-    <style>
-      @font-face {
-        font-family: "GmarketSans";
-        src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
-        font-weight: 500;
-      }
-      :root { --wood:#7ce7a2; --fire:#ff8f8f; --earth:#ffd18a; --metal:#c5d1e6; --water:#74b7ff; }
-      body {
-        font-family: "GmarketSans","Pretendard",sans-serif;
-        background: radial-gradient(circle at 20% 20%, #2b3266 0%, transparent 35%), radial-gradient(circle at 80% 0%, #4e225f 0%, transparent 35%), linear-gradient(135deg,#0b1020,#121a33,#18172e);
-        overflow-x: hidden;
-      }
-      .glass { background: rgba(17,24,39,.58); border: 1px solid rgba(148,163,184,.25); backdrop-filter: blur(16px); }
-      .chip { border-radius: 9999px; padding: .42rem .85rem; font-size: .82rem; font-weight: 700; color: #0f172a; }
-      .floaty { position: fixed; color: rgba(255,255,255,.14); animation: drift 11s ease-in-out infinite; pointer-events: none; }
-      .floaty.alt { animation-duration: 14s; }
-      @keyframes drift { 0%,100% { transform: translateY(0px) rotate(0deg);} 50% { transform: translateY(-18px) rotate(8deg);} }
-      .fun-input { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-      .fun-input:focus { transform: translateY(-1px); box-shadow: 0 12px 26px rgba(99,102,241,.25); border-color: rgb(129 140 248); }
-    </style>
-  </head>
-  <body class="min-h-screen text-slate-100">
-    <i data-lucide="yin-yang" class="floaty left-8 top-20 h-10 w-10"></i>
-    <i data-lucide="moon-star" class="floaty alt right-10 top-32 h-9 w-9"></i>
-    <i data-lucide="sparkles" class="floaty left-[42%] top-16 h-8 w-8"></i>
-    <i data-lucide="stars" class="floaty alt right-[28%] top-[74%] h-8 w-8"></i>
-
-    <main id="app-root" class="relative mx-auto w-full max-w-6xl px-4 py-10 md:px-8 opacity-100">
-      <section class="glass rounded-3xl p-8">
-        <h1 class="text-3xl font-bold md:text-4xl">안보면 니 손해</h1>
-        <p class="mt-2 text-slate-300">오늘 운세, 30초만에 재미있게 확인해보세요.</p>
-      </section>
-
-      <section class="mt-6 grid gap-6 lg:grid-cols-2">
-        <div id="input-card" class="glass rounded-3xl p-6">
-          <h2 class="text-xl font-semibold inline-flex items-center gap-2"><i data-lucide="party-popper" class="h-5 w-5 text-fuchsia-300"></i>지금 바로 입력해봐!</h2>
-          <p class="mt-1 text-sm text-slate-300">생년월일시만 넣으면 바로 결과가 나와요.</p>
-          <form id="saju-form" class="mt-5 space-y-4">
-            <input name="name" required placeholder="예: 홍길동" class="fun-input w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
-            <input type="date" name="birthDate" required class="fun-input w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
-            <div class="grid grid-cols-2 gap-3">
-              <input type="number" name="birthHour" min="0" max="23" required placeholder="태어난 시" class="fun-input rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
-              <input type="number" name="birthMinute" min="0" max="59" required placeholder="태어난 분" class="fun-input rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
-            </div>
-            <select name="gender" required class="fun-input w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3">
-              <option value="">성별 선택</option><option value="male">남성</option><option value="female">여성</option>
-            </select>
-            <div class="grid grid-cols-2 gap-3 text-sm">
-              <label class="rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3"><input type="radio" name="calendarType" value="solar" checked /> 양력</label>
-              <label class="rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3"><input type="radio" name="calendarType" value="lunar" /> 음력</label>
-            </div>
-            <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-500 px-4 py-3 font-semibold inline-flex items-center justify-center gap-2 hover:bg-indigo-400">
-              <i data-lucide="sparkles" class="h-4 w-4"></i>운세 보러가기
-            </button>
-            <div id="loading-wrap" class="hidden rounded-xl border border-slate-600 bg-slate-900/70 p-3">
-              <div class="flex items-center gap-3">
-                <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_j1adxtyb.json" background="transparent" speed="1" style="width:56px;height:56px" loop autoplay></lottie-player>
-                <p class="text-sm text-indigo-300">해석 중... 두근두근 잠시만!</p>
-              </div>
-            </div>
-          </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오늘의 운세</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-amber-50 via-sky-50 to-violet-50 text-slate-800">
+  <main class="mx-auto max-w-6xl px-4 py-8 md:px-8">
+    <section class="overflow-hidden rounded-3xl border border-white/80 bg-white/70 shadow-xl backdrop-blur">
+      <div class="h-56 bg-[url('https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center md:h-72">
+        <div class="flex h-full flex-col justify-end bg-gradient-to-t from-white/90 to-white/20 p-6">
+          <p class="inline-flex w-fit items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-sm font-semibold text-indigo-700"><i data-lucide="sun-medium" class="h-4 w-4"></i>오늘의 운세</p>
+          <h1 class="mt-3 text-3xl font-bold md:text-4xl">카테고리별 맞춤 해석</h1>
+          <p class="mt-1 text-slate-700">연애운, 사업운, 귀인운, 직장운, 재물운을 탭으로 선택해 확인하세요.</p>
         </div>
+      </div>
+    </section>
 
-        <div id="result-card" class="glass rounded-3xl p-6">
-          <h2 class="text-xl font-semibold inline-flex items-center gap-2"><i data-lucide="moon-star" class="h-5 w-5 text-indigo-300"></i>결과</h2>
-          <p id="empty-message" class="mt-5 text-slate-300">입력 후 결과가 여기에 표시됩니다.</p>
-          <div id="result-content" class="mt-5 hidden space-y-4 opacity-100">
-            <p id="profile-line" class="text-sm text-slate-300"></p>
-            <p id="calendar-line" class="text-sm text-slate-300"></p>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="rounded-2xl p-4 bg-slate-900/65"><p class="text-xs">연주</p><p id="year-pillar" class="text-2xl font-bold"></p></div>
-              <div class="rounded-2xl p-4 bg-slate-900/65"><p class="text-xs">월주</p><p id="month-pillar" class="text-2xl font-bold"></p></div>
-              <div class="rounded-2xl p-4 bg-slate-900/65"><p class="text-xs">일주</p><p id="day-pillar" class="text-2xl font-bold"></p></div>
-              <div class="rounded-2xl p-4 bg-slate-900/65"><p class="text-xs">시주</p><p id="time-pillar" class="text-2xl font-bold"></p></div>
-            </div>
-            <div class="rounded-2xl border border-slate-600 bg-slate-900/70 p-4">
-              <p class="text-xs text-slate-400">사주 8자 오행 칩</p>
-              <div id="eight-char-chips" class="mt-2 flex flex-wrap gap-2"></div>
-              <p id="eight-char" class="mt-3 text-lg font-semibold"></p>
-            </div>
-            <div class="rounded-2xl border border-slate-600 bg-slate-900/70 p-4">
-              <p class="text-xs text-slate-400">운세 풀이</p>
-              <p id="ai-fortune" class="mt-2 leading-7 text-slate-200"></p>
-            </div>
+    <section class="mt-6 grid gap-6 lg:grid-cols-2">
+      <div class="rounded-3xl border border-white/80 bg-white/75 p-6 shadow-lg backdrop-blur">
+        <form id="saju-form" class="space-y-4">
+          <input name="name" required placeholder="이름" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3" />
+          <input type="date" name="birthDate" required class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3" />
+          <div class="grid grid-cols-2 gap-3">
+            <input type="number" name="birthHour" min="0" max="23" required placeholder="시" class="rounded-xl border border-slate-200 bg-white px-4 py-3" />
+            <input type="number" name="birthMinute" min="0" max="59" required placeholder="분" class="rounded-xl border border-slate-200 bg-white px-4 py-3" />
           </div>
+          <div class="grid grid-cols-2 gap-3">
+            <select name="gender" required class="rounded-xl border border-slate-200 bg-white px-4 py-3"><option value="">성별</option><option value="male">남성</option><option value="female">여성</option></select>
+            <select name="calendarType" required class="rounded-xl border border-slate-200 bg-white px-4 py-3"><option value="solar">양력</option><option value="lunar">음력</option></select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3" id="tabs">
+            <button type="button" data-category="love" class="tab rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white">연애운</button>
+            <button type="button" data-category="business" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">사업운</button>
+            <button type="button" data-category="benefactor" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">귀인운</button>
+            <button type="button" data-category="career" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">직장운</button>
+            <button type="button" data-category="wealth" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">재물운</button>
+          </div>
+
+          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-500 px-4 py-3 font-semibold text-white hover:bg-indigo-600">오늘의 운세 보기</button>
+        </form>
+      </div>
+
+      <div class="rounded-3xl border border-white/80 bg-white/75 p-6 shadow-lg backdrop-blur">
+        <p id="loading" class="hidden rounded-xl bg-indigo-50 p-3 text-sm text-indigo-700">해석 중... 잠시만 기다려주세요.</p>
+        <p id="empty-message" class="text-slate-600">왼쪽 정보를 입력하면 결과가 표시됩니다.</p>
+        <div id="result-content" class="hidden space-y-3">
+          <p id="category-line" class="text-sm font-semibold text-indigo-700"></p>
+          <p id="profile-line" class="text-sm text-slate-600"></p>
+          <p id="calendar-line" class="text-sm text-slate-600"></p>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="rounded-xl bg-white p-3"><p class="text-xs text-slate-500">연주</p><p id="year-pillar" class="text-xl font-bold"></p></div>
+            <div class="rounded-xl bg-white p-3"><p class="text-xs text-slate-500">월주</p><p id="month-pillar" class="text-xl font-bold"></p></div>
+            <div class="rounded-xl bg-white p-3"><p class="text-xs text-slate-500">일주</p><p id="day-pillar" class="text-xl font-bold"></p></div>
+            <div class="rounded-xl bg-white p-3"><p class="text-xs text-slate-500">시주</p><p id="time-pillar" class="text-xl font-bold"></p></div>
+          </div>
+          <div class="rounded-xl bg-white p-4"><p class="text-xs text-slate-500">사주 8자</p><p id="eight-char" class="mt-1 text-lg font-semibold"></p></div>
+          <div class="rounded-xl bg-indigo-50 p-4"><p class="text-xs text-indigo-600">카테고리 해석</p><p id="ai-fortune" class="mt-2 whitespace-pre-line leading-7 text-slate-700"></p></div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
+  </main>
 
-    <script>
-      const form = document.getElementById("saju-form");
-      const emptyMessage = document.getElementById("empty-message");
-      const resultContent = document.getElementById("result-content");
-      const submitBtn = document.getElementById("submit-btn");
-      const loadingWrap = document.getElementById("loading-wrap");
-      const chipsWrap = document.getElementById("eight-char-chips");
-      const colors = ["var(--wood)","var(--fire)","var(--earth)","var(--water)","var(--metal)"];
+  <script>
+    const form = document.getElementById("saju-form");
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const submitBtn = document.getElementById("submit-btn");
+    const loading = document.getElementById("loading");
+    const emptyMessage = document.getElementById("empty-message");
+    const resultContent = document.getElementById("result-content");
+    let selectedCategory = "love";
 
-      function setLoading(v){ submitBtn.disabled=v; loadingWrap.classList.toggle("hidden", !v); }
-      function chips(text){ chipsWrap.innerHTML=""; (text||"").split(" ").filter(Boolean).forEach((p,i)=>{ const s=document.createElement("span"); s.className="chip"; s.style.background=colors[i%colors.length]; s.textContent=p; chipsWrap.appendChild(s); }); }
-      function animIn(){ if(!window.motion){ document.getElementById("app-root").style.opacity="1"; return; } motion.animate("#app-root",{opacity:[0,1],y:[14,0]},{duration:.45}); }
-      function animResult(){ if(window.motion) motion.animate("#result-content",{opacity:[0,1],y:[10,0]},{duration:.35}); }
-
-      form.addEventListener("submit", async (e)=>{
-        e.preventDefault();
-        const f=new FormData(form);
-        const payload={name:f.get("name"),birthDate:f.get("birthDate"),birthHour:Number(f.get("birthHour")),birthMinute:Number(f.get("birthMinute")),gender:f.get("gender"),calendarType:f.get("calendarType")};
-        try{
-          setLoading(true);
-          const r=await fetch("/api/saju",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-          const raw=await r.text();
-          let data;
-          try{ data=JSON.parse(raw);}catch{ throw new Error("API 응답이 JSON 형식이 아닙니다."); }
-          if(!r.ok) throw new Error(data.message||"요청 실패");
-
-          emptyMessage.classList.add("hidden");
-          resultContent.classList.remove("hidden");
-          document.getElementById("profile-line").textContent=data.profile.name+" / "+(data.profile.gender==="male"?"남성":"여성");
-          document.getElementById("calendar-line").textContent="입력 기준: "+(data.profile.calendarType==="solar"?"양력":"음력")+" | 양력 변환: "+data.saju.solarDateTime;
-          document.getElementById("year-pillar").textContent=data.saju.yearPillar;
-          document.getElementById("month-pillar").textContent=data.saju.monthPillar;
-          document.getElementById("day-pillar").textContent=data.saju.dayPillar;
-          document.getElementById("time-pillar").textContent=data.saju.timePillar;
-          document.getElementById("eight-char").textContent=data.saju.eightChar;
-          document.getElementById("ai-fortune").textContent=data.aiFortune;
-          chips(data.saju.eightChar);
-          animResult();
-        }catch(err){
-          alert(err.message);
-        }finally{
-          setLoading(false);
-          if(window.lucide) window.lucide.createIcons();
-        }
+    function renderTabs() {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.category === selectedCategory;
+        tab.className = active
+          ? "tab rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white"
+          : "tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold";
       });
+    }
 
-      if(window.lucide) window.lucide.createIcons();
-      animIn();
-    </script>
-  </body>
+    tabs.forEach((tab) => tab.addEventListener("click", () => { selectedCategory = tab.dataset.category; renderTabs(); }));
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      const payload = {
+        name: f.get("name"),
+        birthDate: f.get("birthDate"),
+        birthHour: Number(f.get("birthHour")),
+        birthMinute: Number(f.get("birthMinute")),
+        gender: f.get("gender"),
+        calendarType: f.get("calendarType"),
+        category: selectedCategory,
+      };
+
+      try {
+        submitBtn.disabled = true;
+        loading.classList.remove("hidden");
+
+        const response = await fetch("/api/saju", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.message || "운세 조회 실패");
+
+        emptyMessage.classList.add("hidden");
+        resultContent.classList.remove("hidden");
+
+        document.getElementById("category-line").textContent = "선택 카테고리: " + data.categoryLabel;
+        document.getElementById("profile-line").textContent = data.profile.name + " / " + (data.profile.gender === "male" ? "남성" : "여성");
+        document.getElementById("calendar-line").textContent = "달력: " + (data.profile.calendarType === "solar" ? "양력" : "음력") + " | 양력 기준: " + data.saju.solarDateTime;
+        document.getElementById("year-pillar").textContent = data.saju.yearPillar;
+        document.getElementById("month-pillar").textContent = data.saju.monthPillar;
+        document.getElementById("day-pillar").textContent = data.saju.dayPillar;
+        document.getElementById("time-pillar").textContent = data.saju.timePillar;
+        document.getElementById("eight-char").textContent = data.saju.eightChar;
+        document.getElementById("ai-fortune").textContent = data.aiFortune;
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        submitBtn.disabled = false;
+        loading.classList.add("hidden");
+        if (window.lucide) window.lucide.createIcons();
+      }
+    });
+
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
 </html>
