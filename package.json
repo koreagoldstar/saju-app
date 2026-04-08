@@ -1,0 +1,13 @@
+﻿{
+  "name": "saju-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Saju app starter with lunar-javascript setup",
+  "main": "src/app/main.js",
+  "scripts": {
+    "start": "node src/app/main.js"
+  },
+  "dependencies": {
+    "lunar-javascript": "latest"
+  }
+}
