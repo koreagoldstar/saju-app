@@ -3,87 +3,158 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>오늘의 운세</title>
+  <title>안보면 니 손해</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 194, 235, 0.45), transparent 36%),
+        radial-gradient(circle at 90% 10%, rgba(188, 220, 255, 0.48), transparent 34%),
+        linear-gradient(140deg, #f2f6ff 0%, #f6ecff 52%, #e9f5ff 100%);
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.52);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 16px 40px rgba(86, 95, 131, 0.16);
+    }
+    .star {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.92);
+      animation: twinkle 2.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.35); }
+    }
+    .tab.active {
+      background: linear-gradient(135deg, #7c67ff, #ff72ba);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 8px 20px rgba(124, 103, 255, 0.35);
+    }
+    .blur-lock {
+      position: relative;
+      overflow: hidden;
+    }
+    .blur-lock::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,0.58));
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-amber-50 via-sky-50 to-violet-50 text-slate-800">
-  <main class="mx-auto max-w-6xl px-4 py-8 md:px-8">
-    <section class="overflow-hidden rounded-3xl border border-white/80 bg-white/70 shadow-xl backdrop-blur">
-      <div class="h-56 bg-[url('https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=1500&q=80')] bg-cover bg-center md:h-72">
-        <div class="flex h-full flex-col justify-end bg-gradient-to-t from-white/90 to-white/20 p-6">
-          <p class="inline-flex w-fit items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-sm font-semibold text-indigo-700"><i data-lucide="sun-medium" class="h-4 w-4"></i>오늘의 운세</p>
-          <h1 class="mt-3 text-3xl font-bold md:text-4xl">카테고리별 맞춤 해석</h1>
-          <p class="mt-1 text-slate-700">연애운, 사업운, 귀인운, 직장운, 재물운을 탭으로 선택해 확인하세요.</p>
+<body class="min-h-screen text-slate-800">
+  <span class="star" style="left:7%;top:11%"></span>
+  <span class="star" style="left:84%;top:14%;animation-delay:.7s"></span>
+  <span class="star" style="left:16%;top:71%;animation-delay:1.2s"></span>
+  <span class="star" style="left:76%;top:77%;animation-delay:.35s"></span>
+
+  <main class="mx-auto w-full max-w-6xl px-4 pb-24 pt-8 md:px-8">
+    <section class="glass overflow-hidden rounded-3xl p-6 md:p-8">
+      <div class="grid gap-6 md:grid-cols-2 md:items-center">
+        <div>
+          <h1 class="text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">안보면 니 손해</h1>
+          <p class="mt-3 text-sm text-slate-600">오늘의 운세 미리보기와 프리미엄 해석을 한 번에 확인하세요.</p>
+          <div class="mt-4 inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-indigo-700">
+            <i data-lucide="sparkles" class="h-3.5 w-3.5"></i> 1,200+ users today · 정확도 97.8%
+          </div>
+        </div>
+        <div class="rounded-2xl bg-white/60 p-4">
+          <p class="text-xs font-semibold text-slate-500">오늘의 무료 미리보기</p>
+          <div class="mt-2 flex items-center justify-between">
+            <span class="text-sm font-semibold text-indigo-700">연애운</span>
+            <span class="text-sm font-bold text-amber-500">4.6 ★★★★☆</span>
+          </div>
+          <p class="mt-2 text-sm text-slate-700">오늘은 대화 운이 좋아서 마음을 먼저 열면 관계가 빠르게 가까워집니다.</p>
         </div>
       </div>
     </section>
 
     <section class="mt-6 grid gap-6 lg:grid-cols-2">
-      <div class="rounded-3xl border border-white/80 bg-white/75 p-6 shadow-lg backdrop-blur">
+      <div class="glass rounded-3xl p-5 md:p-6">
         <form id="saju-form" class="space-y-4">
-          <input name="name" required placeholder="이름" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3" />
-          <input type="date" name="birthDate" required class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3" />
+          <input name="name" required placeholder="이름" class="w-full rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400" />
+          <input type="date" name="birthDate" required class="w-full rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400" />
           <div class="grid grid-cols-2 gap-3">
-            <input type="number" name="birthHour" min="0" max="23" required placeholder="시" class="rounded-xl border border-slate-200 bg-white px-4 py-3" />
-            <input type="number" name="birthMinute" min="0" max="59" required placeholder="분" class="rounded-xl border border-slate-200 bg-white px-4 py-3" />
+            <input type="number" name="birthHour" min="0" max="23" required placeholder="시" class="rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400" />
+            <input type="number" name="birthMinute" min="0" max="59" required placeholder="분" class="rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400" />
           </div>
           <div class="grid grid-cols-2 gap-3">
-            <select name="gender" required class="rounded-xl border border-slate-200 bg-white px-4 py-3"><option value="">성별</option><option value="male">남성</option><option value="female">여성</option></select>
-            <select name="calendarType" required class="rounded-xl border border-slate-200 bg-white px-4 py-3"><option value="solar">양력</option><option value="lunar">음력</option></select>
+            <select name="gender" required class="rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400"><option value="">성별</option><option value="male">남성</option><option value="female">여성</option></select>
+            <select name="calendarType" required class="rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400"><option value="solar">양력</option><option value="lunar">음력</option></select>
           </div>
 
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3" id="tabs">
-            <button type="button" data-category="love" class="tab rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white">연애운</button>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <button type="button" data-category="love" class="tab active rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">연애운</button>
             <button type="button" data-category="business" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">사업운</button>
             <button type="button" data-category="benefactor" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">귀인운</button>
             <button type="button" data-category="career" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">직장운</button>
             <button type="button" data-category="wealth" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">재물운</button>
           </div>
 
-          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-500 px-4 py-3 font-semibold text-white hover:bg-indigo-600">오늘의 운세 보기</button>
+          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white hover:bg-indigo-700">Continue Reading</button>
         </form>
+
+        <button class="mt-3 w-full rounded-xl bg-fuchsia-500 px-4 py-3 text-sm font-semibold text-white hover:bg-fuchsia-600">Unlock Full Fortune</button>
       </div>
 
-      <div class="rounded-3xl border border-white/80 bg-white/75 p-6 shadow-lg backdrop-blur">
-        <p id="loading" class="hidden rounded-xl bg-indigo-50 p-3 text-sm text-indigo-700">해석 중... 잠시만 기다려주세요.</p>
-        <p id="empty-message" class="text-slate-600">왼쪽 정보를 입력하면 결과가 표시됩니다.</p>
-        <div id="result-content" class="hidden space-y-3">
-          <p id="category-line" class="text-sm font-semibold text-indigo-700"></p>
-          <p id="profile-line" class="text-sm text-slate-600"></p>
-          <p id="calendar-line" class="text-sm text-slate-600"></p>
-          <div class="grid grid-cols-2 gap-3">
-            <div class="rounded-xl bg-white p-3"><p class="text-xs text-slate-500">연주</p><p id="year-pillar" class="text-xl font-bold"></p></div>
-            <div class="rounded-xl bg-white p-3"><p class="text-xs text-slate-500">월주</p><p id="month-pillar" class="text-xl font-bold"></p></div>
-            <div class="rounded-xl bg-white p-3"><p class="text-xs text-slate-500">일주</p><p id="day-pillar" class="text-xl font-bold"></p></div>
-            <div class="rounded-xl bg-white p-3"><p class="text-xs text-slate-500">시주</p><p id="time-pillar" class="text-xl font-bold"></p></div>
+      <div class="space-y-4">
+        <div class="glass rounded-3xl p-5">
+          <p id="loading" class="hidden rounded-xl bg-indigo-50 p-3 text-sm text-indigo-700">해석 중... 운세를 읽는 중입니다.</p>
+          <p id="empty-message" class="text-sm text-slate-600">정보를 입력하면 오늘 운세 결과가 표시됩니다.</p>
+
+          <div id="result-content" class="hidden space-y-3">
+            <p id="category-line" class="text-sm font-semibold text-indigo-700"></p>
+            <p id="profile-line" class="text-sm text-slate-600"></p>
+            <p id="calendar-line" class="text-sm text-slate-600"></p>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="rounded-xl bg-white/80 p-3"><p class="text-xs text-slate-500">연주</p><p id="year-pillar" class="text-xl font-bold"></p></div>
+              <div class="rounded-xl bg-white/80 p-3"><p class="text-xs text-slate-500">월주</p><p id="month-pillar" class="text-xl font-bold"></p></div>
+              <div class="rounded-xl bg-white/80 p-3"><p class="text-xs text-slate-500">일주</p><p id="day-pillar" class="text-xl font-bold"></p></div>
+              <div class="rounded-xl bg-white/80 p-3"><p class="text-xs text-slate-500">시주</p><p id="time-pillar" class="text-xl font-bold"></p></div>
+            </div>
+            <div class="rounded-xl bg-white/80 p-4"><p class="text-xs text-slate-500">사주 8자</p><p id="eight-char" class="mt-1 text-lg font-semibold"></p></div>
+            <div class="rounded-xl bg-indigo-50 p-4"><p class="text-xs text-indigo-600">해석</p><p id="ai-fortune" class="mt-2 whitespace-pre-line leading-7 text-slate-700"></p></div>
           </div>
-          <div class="rounded-xl bg-white p-4"><p class="text-xs text-slate-500">사주 8자</p><p id="eight-char" class="mt-1 text-lg font-semibold"></p></div>
-          <div class="rounded-xl bg-indigo-50 p-4"><p class="text-xs text-indigo-600">카테고리 해석</p><p id="ai-fortune" class="mt-2 whitespace-pre-line leading-7 text-slate-700"></p></div>
+        </div>
+
+        <div class="glass blur-lock rounded-3xl p-5">
+          <p class="text-xs font-semibold text-fuchsia-600">Premium Locked</p>
+          <p class="mt-2 text-sm text-slate-700">상세 궁합, 시기별 운세, 맞춤 행동 가이드는 프리미엄에서 확인 가능합니다.</p>
+          <button class="mt-4 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white">Unlock Full Fortune</button>
         </div>
       </div>
     </section>
   </main>
 
+  <button class="fixed bottom-4 left-1/2 z-30 w-[92%] max-w-md -translate-x-1/2 rounded-2xl bg-gradient-to-r from-indigo-600 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-2xl">Unlock Full Fortune</button>
+
   <script>
     const form = document.getElementById("saju-form");
     const tabs = Array.from(document.querySelectorAll(".tab"));
-    const submitBtn = document.getElementById("submit-btn");
     const loading = document.getElementById("loading");
     const emptyMessage = document.getElementById("empty-message");
     const resultContent = document.getElementById("result-content");
+    const submitBtn = document.getElementById("submit-btn");
     let selectedCategory = "love";
 
-    function renderTabs() {
+    function setTab(category) {
+      selectedCategory = category;
       tabs.forEach((tab) => {
-        const active = tab.dataset.category === selectedCategory;
-        tab.className = active
-          ? "tab rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white"
-          : "tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold";
+        tab.classList.toggle("active", tab.dataset.category === category);
       });
     }
 
-    tabs.forEach((tab) => tab.addEventListener("click", () => { selectedCategory = tab.dataset.category; renderTabs(); }));
+    tabs.forEach((tab) => tab.addEventListener("click", () => setTab(tab.dataset.category)));
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -102,13 +173,14 @@
         submitBtn.disabled = true;
         loading.classList.remove("hidden");
 
-        const response = await fetch("/api/saju", {
+        const res = await fetch("/api/saju", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.message || "운세 조회 실패");
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "요청 실패");
 
         emptyMessage.classList.add("hidden");
         resultContent.classList.remove("hidden");
@@ -122,8 +194,8 @@
         document.getElementById("time-pillar").textContent = data.saju.timePillar;
         document.getElementById("eight-char").textContent = data.saju.eightChar;
         document.getElementById("ai-fortune").textContent = data.aiFortune;
-      } catch (error) {
-        alert(error.message);
+      } catch (err) {
+        alert(err.message);
       } finally {
         submitBtn.disabled = false;
         loading.classList.add("hidden");
