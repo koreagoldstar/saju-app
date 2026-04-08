@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Saju Insight</title>
+    <title>안보면 니 손해</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
@@ -15,50 +15,68 @@
         font-weight: 500;
       }
       :root { --wood:#7ce7a2; --fire:#ff8f8f; --earth:#ffd18a; --metal:#c5d1e6; --water:#74b7ff; }
-      body { font-family: "GmarketSans","Pretendard",-apple-system,sans-serif; background: linear-gradient(135deg,#0b1020,#141b34,#1a1730); }
-      .glass { background: rgba(17,24,39,.58); border:1px solid rgba(148,163,184,.25); backdrop-filter: blur(16px); }
-      .chip { border-radius:9999px; padding:.42rem .85rem; font-size:.82rem; font-weight:700; color:#0f172a; }
+      body {
+        font-family: "GmarketSans","Pretendard",sans-serif;
+        background: radial-gradient(circle at 20% 20%, #2b3266 0%, transparent 35%), radial-gradient(circle at 80% 0%, #4e225f 0%, transparent 35%), linear-gradient(135deg,#0b1020,#121a33,#18172e);
+        overflow-x: hidden;
+      }
+      .glass { background: rgba(17,24,39,.58); border: 1px solid rgba(148,163,184,.25); backdrop-filter: blur(16px); }
+      .chip { border-radius: 9999px; padding: .42rem .85rem; font-size: .82rem; font-weight: 700; color: #0f172a; }
+      .floaty { position: fixed; color: rgba(255,255,255,.14); animation: drift 11s ease-in-out infinite; pointer-events: none; }
+      .floaty.alt { animation-duration: 14s; }
+      @keyframes drift { 0%,100% { transform: translateY(0px) rotate(0deg);} 50% { transform: translateY(-18px) rotate(8deg);} }
+      .fun-input { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+      .fun-input:focus { transform: translateY(-1px); box-shadow: 0 12px 26px rgba(99,102,241,.25); border-color: rgb(129 140 248); }
     </style>
   </head>
   <body class="min-h-screen text-slate-100">
+    <i data-lucide="yin-yang" class="floaty left-8 top-20 h-10 w-10"></i>
+    <i data-lucide="moon-star" class="floaty alt right-10 top-32 h-9 w-9"></i>
+    <i data-lucide="sparkles" class="floaty left-[42%] top-16 h-8 w-8"></i>
+    <i data-lucide="stars" class="floaty alt right-[28%] top-[74%] h-8 w-8"></i>
+
     <main id="app-root" class="relative mx-auto w-full max-w-6xl px-4 py-10 md:px-8 opacity-100">
       <section class="glass rounded-3xl p-8">
-        <p class="text-xs uppercase tracking-[0.22em] text-indigo-300">Saju Healing Insight</p>
-        <h1 class="mt-2 text-3xl font-bold md:text-4xl">사주 만세력 & AI 힐링 리포트</h1>
+        <h1 class="text-3xl font-bold md:text-4xl">안보면 니 손해</h1>
+        <p class="mt-2 text-slate-300">오늘 운세, 30초만에 재미있게 확인해보세요.</p>
       </section>
+
       <section class="mt-6 grid gap-6 lg:grid-cols-2">
         <div id="input-card" class="glass rounded-3xl p-6">
-          <h2 class="text-xl font-semibold inline-flex items-center gap-2"><i data-lucide="clipboard-pen-line" class="h-5 w-5 text-indigo-300"></i>입력 폼</h2>
+          <h2 class="text-xl font-semibold inline-flex items-center gap-2"><i data-lucide="party-popper" class="h-5 w-5 text-fuchsia-300"></i>지금 바로 입력해봐!</h2>
+          <p class="mt-1 text-sm text-slate-300">생년월일시만 넣으면 바로 결과가 나와요.</p>
           <form id="saju-form" class="mt-5 space-y-4">
-            <input name="name" required placeholder="이름" class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
-            <input type="date" name="birthDate" required class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
+            <input name="name" required placeholder="예: 홍길동" class="fun-input w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
+            <input type="date" name="birthDate" required class="fun-input w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
             <div class="grid grid-cols-2 gap-3">
-              <input type="number" name="birthHour" min="0" max="23" required placeholder="시" class="rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
-              <input type="number" name="birthMinute" min="0" max="59" required placeholder="분" class="rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
+              <input type="number" name="birthHour" min="0" max="23" required placeholder="태어난 시" class="fun-input rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
+              <input type="number" name="birthMinute" min="0" max="59" required placeholder="태어난 분" class="fun-input rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3" />
             </div>
-            <select name="gender" required class="w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3">
+            <select name="gender" required class="fun-input w-full rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3">
               <option value="">성별 선택</option><option value="male">남성</option><option value="female">여성</option>
             </select>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-2 gap-3 text-sm">
               <label class="rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3"><input type="radio" name="calendarType" value="solar" checked /> 양력</label>
               <label class="rounded-xl border border-slate-600 bg-slate-900/70 px-4 py-3"><input type="radio" name="calendarType" value="lunar" /> 음력</label>
             </div>
-            <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-500 px-4 py-3 font-semibold inline-flex items-center justify-center gap-2"><i data-lucide="sparkles" class="h-4 w-4"></i>사주 결과 보기</button>
+            <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-500 px-4 py-3 font-semibold inline-flex items-center justify-center gap-2 hover:bg-indigo-400">
+              <i data-lucide="sparkles" class="h-4 w-4"></i>운세 보러가기
+            </button>
             <div id="loading-wrap" class="hidden rounded-xl border border-slate-600 bg-slate-900/70 p-3">
               <div class="flex items-center gap-3">
                 <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_j1adxtyb.json" background="transparent" speed="1" style="width:56px;height:56px" loop autoplay></lottie-player>
-                <p class="text-sm text-indigo-300">해석 중입니다... 잠시만 기다려주세요.</p>
+                <p class="text-sm text-indigo-300">해석 중... 두근두근 잠시만!</p>
               </div>
             </div>
           </form>
         </div>
+
         <div id="result-card" class="glass rounded-3xl p-6">
           <h2 class="text-xl font-semibold inline-flex items-center gap-2"><i data-lucide="moon-star" class="h-5 w-5 text-indigo-300"></i>결과</h2>
           <p id="empty-message" class="mt-5 text-slate-300">입력 후 결과가 여기에 표시됩니다.</p>
           <div id="result-content" class="mt-5 hidden space-y-4 opacity-100">
             <p id="profile-line" class="text-sm text-slate-300"></p>
             <p id="calendar-line" class="text-sm text-slate-300"></p>
-            <p id="provider-line" class="text-xs text-slate-400"></p>
             <div class="grid grid-cols-2 gap-3">
               <div class="rounded-2xl p-4 bg-slate-900/65"><p class="text-xs">연주</p><p id="year-pillar" class="text-2xl font-bold"></p></div>
               <div class="rounded-2xl p-4 bg-slate-900/65"><p class="text-xs">월주</p><p id="month-pillar" class="text-2xl font-bold"></p></div>
@@ -71,13 +89,14 @@
               <p id="eight-char" class="mt-3 text-lg font-semibold"></p>
             </div>
             <div class="rounded-2xl border border-slate-600 bg-slate-900/70 p-4">
-              <p class="text-xs text-slate-400">AI 운세 풀이</p>
+              <p class="text-xs text-slate-400">운세 풀이</p>
               <p id="ai-fortune" class="mt-2 leading-7 text-slate-200"></p>
             </div>
           </div>
         </div>
       </section>
     </main>
+
     <script>
       const form = document.getElementById("saju-form");
       const emptyMessage = document.getElementById("empty-message");
@@ -86,31 +105,44 @@
       const loadingWrap = document.getElementById("loading-wrap");
       const chipsWrap = document.getElementById("eight-char-chips");
       const colors = ["var(--wood)","var(--fire)","var(--earth)","var(--water)","var(--metal)"];
-      function setLoading(v){ submitBtn.disabled=v; loadingWrap.classList.toggle("hidden",!v); }
+
+      function setLoading(v){ submitBtn.disabled=v; loadingWrap.classList.toggle("hidden", !v); }
       function chips(text){ chipsWrap.innerHTML=""; (text||"").split(" ").filter(Boolean).forEach((p,i)=>{ const s=document.createElement("span"); s.className="chip"; s.style.background=colors[i%colors.length]; s.textContent=p; chipsWrap.appendChild(s); }); }
-      function animIn(){ if(!window.motion){ document.getElementById("app-root").style.opacity="1"; return; } motion.animate("#app-root",{opacity:[0,1],y:[12,0]},{duration:.45}); }
+      function animIn(){ if(!window.motion){ document.getElementById("app-root").style.opacity="1"; return; } motion.animate("#app-root",{opacity:[0,1],y:[14,0]},{duration:.45}); }
       function animResult(){ if(window.motion) motion.animate("#result-content",{opacity:[0,1],y:[10,0]},{duration:.35}); }
+
       form.addEventListener("submit", async (e)=>{
-        e.preventDefault(); const f=new FormData(form);
+        e.preventDefault();
+        const f=new FormData(form);
         const payload={name:f.get("name"),birthDate:f.get("birthDate"),birthHour:Number(f.get("birthHour")),birthMinute:Number(f.get("birthMinute")),gender:f.get("gender"),calendarType:f.get("calendarType")};
         try{
           setLoading(true);
           const r=await fetch("/api/saju",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-          const raw=await r.text(); let data; try{ data=JSON.parse(raw);}catch{ throw new Error("API 응답이 JSON 형식이 아닙니다.");}
+          const raw=await r.text();
+          let data;
+          try{ data=JSON.parse(raw);}catch{ throw new Error("API 응답이 JSON 형식이 아닙니다."); }
           if(!r.ok) throw new Error(data.message||"요청 실패");
-          emptyMessage.classList.add("hidden"); resultContent.classList.remove("hidden");
-          document.getElementById("profile-line").textContent = data.profile.name + " / " + (data.profile.gender==="male"?"남성":"여성");
-          document.getElementById("calendar-line").textContent = "입력 기준: " + (data.profile.calendarType==="solar"?"양력":"음력") + " | 양력 변환: " + data.saju.solarDateTime;
-          document.getElementById("provider-line").textContent = data.aiProvider==="claude" ? "AI 해석: Claude" : "AI 해석: 기본 모드";
+
+          emptyMessage.classList.add("hidden");
+          resultContent.classList.remove("hidden");
+          document.getElementById("profile-line").textContent=data.profile.name+" / "+(data.profile.gender==="male"?"남성":"여성");
+          document.getElementById("calendar-line").textContent="입력 기준: "+(data.profile.calendarType==="solar"?"양력":"음력")+" | 양력 변환: "+data.saju.solarDateTime;
           document.getElementById("year-pillar").textContent=data.saju.yearPillar;
           document.getElementById("month-pillar").textContent=data.saju.monthPillar;
           document.getElementById("day-pillar").textContent=data.saju.dayPillar;
           document.getElementById("time-pillar").textContent=data.saju.timePillar;
           document.getElementById("eight-char").textContent=data.saju.eightChar;
           document.getElementById("ai-fortune").textContent=data.aiFortune;
-          chips(data.saju.eightChar); animResult();
-        }catch(err){ alert(err.message);} finally{ setLoading(false); if(window.lucide) window.lucide.createIcons(); }
+          chips(data.saju.eightChar);
+          animResult();
+        }catch(err){
+          alert(err.message);
+        }finally{
+          setLoading(false);
+          if(window.lucide) window.lucide.createIcons();
+        }
       });
+
       if(window.lucide) window.lucide.createIcons();
       animIn();
     </script>
