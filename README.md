@@ -34,3 +34,8 @@ ANTHROPIC_API_KEY=여기에_Claude_API_키
 
 2. 서버 재시작 후 `/api/saju` 요청 시 Claude 풀이를 사용합니다.
 3. 키가 없거나 호출 실패 시 fallback 풀이가 반환됩니다.
+
+## Monitoring and Self-Healing
+
+- Sentry backend monitoring is enabled when `SENTRY_DSN` is configured.
+- See `docs/self-healing-workflow.md` for n8n/Make + Gemini + Kakao alert automation design.

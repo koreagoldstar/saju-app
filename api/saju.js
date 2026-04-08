@@ -1,5 +1,8 @@
 const { getSajuFromInput } = require("../lib/saju");
 const { getClaudeSajuFortune } = require("../lib/claude");
+const { initSentry, captureException, captureMessage } = require("../lib/sentry");
+
+initSentry();
 
 function buildFallbackFortune(data) {
   const name = data.name;
@@ -50,6 +53,10 @@ module.exports = async function handler(req, res) {
     } catch (apiError) {
       aiProvider = "fallback";
       aiFortune = buildFallbackFortune({ name, gender, saju });
+      captureMessage("Claude API fallback", {
+        reason: apiError.message,
+        calendarType,
+      });
       console.error("Claude API fallback:", apiError.message);
     }
 
@@ -60,6 +67,7 @@ module.exports = async function handler(req, res) {
       aiFortune,
     });
   } catch (error) {
+    captureException(error, { path: "/api/saju" });
     return res.status(500).json({ message: "사주 계산 중 오류가 발생했습니다.", detail: error.message });
   }
 };
