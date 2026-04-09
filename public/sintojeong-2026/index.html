@@ -103,7 +103,7 @@
       const res = await fetch("/api/premium-tojeong", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json();
       if (!res.ok) return alert(data.message || "요청 실패");
-      summary.textContent = data.profile.name + "님의 2026년 핵심 전략: 상반기 구조정비, 하반기 선택적 확장.";
+      summary.textContent = data.summary || (data.profile.name + "님의 2026년 핵심 전략: 상반기 구조정비, 하반기 선택적 확장.");
       result.textContent = data.report;
     });
   </script>

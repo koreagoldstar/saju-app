@@ -77,7 +77,7 @@
           <p id="score" class="mt-1 text-3xl font-bold text-amber-200">-</p>
         </div>
         <p id="summary" class="mt-3 rounded-lg bg-black/30 p-3 text-sm text-stone-200">입력 후 궁합 요약이 표시됩니다.</p>
-        <pre id="result" class="mt-3 max-h-[280px] overflow-auto rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap"></pre>
+        <pre id="result" class="mt-3 max-h-[320px] overflow-auto rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap"></pre>
       </div>
     </section>
   </main>
@@ -111,10 +111,35 @@
       };
       const res = await fetch("/api/compatibility", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json();
-      if (!res.ok) return alert(data.message || "요청 실패");
+      if (!res.ok) {
+        score.textContent = "-";
+        summary.textContent = data.message || "요청 실패";
+        result.textContent = "입력값을 다시 확인해 주세요.";
+        return;
+      }
       score.textContent = data.score + "점";
       summary.textContent = data.summary;
-      result.textContent = "오행 편차 상세\n" + JSON.stringify(data.elementDiff, null, 2) + "\n\n충돌 요소\n" + JSON.stringify(data.collisions, null, 2);
+      const elementDiffText = Object.entries(data.elementDiff || {})
+        .map(([k, v]) => k + ": " + (v > 0 ? "+" : "") + v)
+        .join(", ");
+      const collisionsText = (data.collisions || []).length
+        ? data.collisions.map((c) => c.element + "(" + (c.gap > 0 ? "+" : "") + c.gap + ")").join(", ")
+        : "큰 충돌 요소 없음";
+      result.textContent =
+        "감성 궁합 해석\n" +
+        (data.emotionalTone || "-") +
+        "\n\n관계의 강점\n" +
+        (data.resonancePoint || "-") +
+        "\n\n주의 포인트\n" +
+        (data.cautionPoint || "-") +
+        "\n\n관계 회복 루틴\n" +
+        (data.careRitual || "-") +
+        "\n\n대화 가이드\n" +
+        (data.conversationGuide || "-") +
+        "\n\n오행 편차\n" +
+        elementDiffText +
+        "\n\n충돌 요소\n" +
+        collisionsText;
     });
   </script>
 </body>
