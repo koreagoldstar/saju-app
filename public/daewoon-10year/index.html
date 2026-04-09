@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>10년 대운 분석</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       background:
@@ -100,6 +101,25 @@
           <p class="text-xs text-amber-200">개운법</p>
           <ul id="luck-tips" class="mt-2 space-y-1 text-xs text-stone-200"></ul>
         </div>
+        <div class="mt-3 rounded-lg bg-black/30 p-3">
+          <p class="text-xs text-stone-400">오행 분석 레이더</p>
+          <canvas id="five-radar" class="mt-2" height="180"></canvas>
+          <div class="mt-3 grid grid-cols-2 gap-2 text-[11px] text-stone-300">
+            <p><span style="color:#22c55e">●</span> 목: 성장/확장</p>
+            <p><span style="color:#ef4444">●</span> 화: 활력/표현</p>
+            <p><span style="color:#eab308">●</span> 토: 안정/중심</p>
+            <p><span style="color:#cbd5e1">●</span> 금: 정리/결단</p>
+            <p class="col-span-2"><span style="color:#3b82f6">●</span> 수: 회복/유연성</p>
+          </div>
+        </div>
+        <div class="mt-3 rounded-lg bg-black/30 p-3">
+          <p class="text-xs text-stone-400">인생대운 흐름 그래프</p>
+          <canvas id="flow-line" class="mt-2" height="160"></canvas>
+        </div>
+        <div class="mt-3 rounded-lg bg-black/30 p-3">
+          <p class="text-xs text-amber-200">재미 포인트</p>
+          <p id="fun-facts" class="mt-1 text-xs text-stone-200"></p>
+        </div>
         <div id="timeline" class="mt-3 space-y-2"></div>
         <pre id="result" class="mt-3 max-h-[260px] overflow-auto rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap"></pre>
       </div>
@@ -111,6 +131,12 @@
     const timeline = document.getElementById("timeline");
     const summary = document.getElementById("summary");
     const luckTips = document.getElementById("luck-tips");
+    const funFacts = document.getElementById("fun-facts");
+    let radarChart = null;
+    let flowChart = null;
+    const ELEMENT_ORDER = ["wood", "fire", "earth", "metal", "water"];
+    const ELEMENT_LABELS = ["목", "화", "토", "금", "수"];
+    const ELEMENT_COLORS = ["#22c55e", "#ef4444", "#eab308", "#cbd5e1", "#3b82f6"];
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("in"));
     }, { threshold: 0.1 });
@@ -121,6 +147,70 @@
       document.body.style.setProperty("--mx", x + "%");
       document.body.style.setProperty("--my", y + "%");
     });
+    function renderCharts(saju, daYunTimeline) {
+      if (!window.Chart || !saju) return;
+      const counts = (saju.fiveElements && saju.fiveElements.counts) || {};
+      const vals = ELEMENT_ORDER.map((k) => counts[k] || 0);
+      const radar = document.getElementById("five-radar");
+      const flow = document.getElementById("flow-line");
+      if (radarChart) radarChart.destroy();
+      if (flowChart) flowChart.destroy();
+      radarChart = new Chart(radar, {
+        type: "radar",
+        data: {
+          labels: ELEMENT_LABELS,
+          datasets: [{
+            label: "오행 균형",
+            data: vals,
+            borderColor: "#fcd34d",
+            backgroundColor: "rgba(250,204,21,.12)",
+            pointBackgroundColor: ELEMENT_COLORS,
+            pointBorderColor: "#111827",
+            pointRadius: 4,
+          }],
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: "#e5e7eb" } },
+            tooltip: { callbacks: { label: (ctx) => ctx.label + " 기운: " + ctx.parsed.r } },
+          },
+          scales: { r: { ticks: { color: "#9ca3af", backdropColor: "transparent" }, pointLabels: { color: "#d1d5db" } } },
+        },
+      });
+      const src = (daYunTimeline || []).slice(0, 8);
+      const labels = src.map((x) => String(x.startYear).slice(2) + "~" + String(x.endYear).slice(2));
+      const values = src.map((x, i) => 58 + ((Number(x.startAge) || i * 4) % 36));
+      const current = saju.luckCycle && saju.luckCycle.currentDaYun;
+      const currentIndex = src.findIndex((x) => current && x.startYear === current.startYear && x.endYear === current.endYear);
+      flowChart = new Chart(flow, {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: "대운 흐름",
+            data: values,
+            borderColor: "#38bdf8",
+            backgroundColor: "rgba(56,189,248,.18)",
+            fill: true,
+            tension: 0.35,
+            pointRadius: values.map((_, i) => (i === currentIndex ? 6 : 3)),
+            pointBackgroundColor: values.map((_, i) => (i === currentIndex ? "#f59e0b" : "#38bdf8")),
+          }],
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: "#e5e7eb" } },
+            tooltip: {
+              callbacks: {
+                title: (items) => "대운 구간: " + (items[0] ? items[0].label : ""),
+                label: (ctx) => (ctx.dataIndex === currentIndex ? "현재 구간" : "흐름 지수") + ": " + ctx.parsed.y,
+              },
+            },
+          },
+          scales: { x: { ticks: { color: "#cbd5e1" } }, y: { ticks: { color: "#cbd5e1" }, min: 40, max: 100 } },
+        },
+      });
+    }
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const f = new FormData(form);
@@ -136,13 +226,20 @@
       const data = await res.json();
       if (!res.ok) return alert(data.message || "요청 실패");
       summary.textContent = data.summary || "대운 흐름에 맞춘 보수적 운영을 권장합니다.";
-      luckTips.innerHTML = (data.luckTips || []).map((x) => '<li>• ' + x + '</li>').join("");
+      const guide = data.luckGuide || {};
+      luckTips.innerHTML = [
+        "오늘 실천: " + (guide.today || "-"),
+        "이번 주 실천: " + (guide.thisWeek || "-"),
+        "피해야 할 행동: " + (guide.avoid || "-"),
+      ].map((x) => '<li>• ' + x + '</li>').join("");
+      funFacts.textContent = "이번달 나에게 가장 좋은 날짜: " + ((data.funFacts && data.funFacts.bestDate) || "-") + "일 · 나에게 가장 좋은 숫자: " + ((data.funFacts && data.funFacts.bestNumber) || "-");
       timeline.innerHTML = (data.daYunTimeline || []).map((x) =>
         '<div class="rounded-lg border border-amber-300/20 bg-black/30 p-2 text-xs">' +
         '<p class="font-semibold text-amber-200">' + (x.ganZhi || "-") + "</p>" +
         '<p class="text-stone-300">' + x.startYear + "~" + x.endYear + " · 나이 " + x.startAge + "~" + x.endAge + "</p>" +
         "</div>"
       ).join("");
+      renderCharts(data.saju, data.daYunTimeline);
       result.textContent = data.report;
     });
   </script>

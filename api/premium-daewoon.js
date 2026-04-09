@@ -1,5 +1,13 @@
 const { getSajuFromInput } = require("../lib/saju");
 
+function getFunFacts(seed) {
+  const n = Math.abs(Number(seed) || 1);
+  return {
+    bestDate: (n % 27) + 1,
+    bestNumber: (n % 9) + 1,
+  };
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
@@ -16,6 +24,7 @@ module.exports = async function handler(req, res) {
     const daYunList = (saju.luckCycle && saju.luckCycle.daYunList) || [];
     const top10 = daYunList.slice(0, 10);
     const currentDaYun = saju.luckCycle && saju.luckCycle.currentDaYun;
+    const funFacts = getFunFacts(year + month + day + Number(birthHour) + Number(birthMinute));
     const report = top10
       .map((item, idx) => `${idx + 1}. ${item.ganZhi || "-"} | ${item.startYear}~${item.endYear} | 나이 ${item.startAge}~${item.endAge}`)
       .join("\n");
@@ -30,11 +39,12 @@ module.exports = async function handler(req, res) {
       saju,
       daYunTimeline: top10,
       summary: strategy,
-      luckTips: [
-        "현재 대운 핵심 키워드 1개를 정해 90일 단위로 실행하세요.",
-        "대운 전환 1~2년 전에는 보수적 결정을 우선해 변동성을 줄이세요.",
-        "월 1회 기록으로 '잘된 선택/아쉬운 선택'을 구분해 패턴을 고정하세요.",
-      ],
+      luckGuide: {
+        today: "현재 대운 핵심 키워드 1개를 정해 오늘 실행 1건을 완료하세요.",
+        thisWeek: "대운 전환 가능성을 고려해 이번 주는 보수적 결정을 우선하세요.",
+        avoid: "장기 계획 없이 단기 성과만 쫓는 선택은 피하세요.",
+      },
+      funFacts,
       report: "10년 대운 타임라인\n" + report + "\n\n운영 조언\n" + strategy,
     });
   } catch (error) {

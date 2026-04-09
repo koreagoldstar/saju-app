@@ -1,5 +1,13 @@
 const { getSajuFromInput } = require("../lib/saju");
 
+function getFunFacts(seed) {
+  const n = Math.abs(Number(seed) || 1);
+  return {
+    bestDate: (n % 27) + 1,
+    bestNumber: (n % 9) + 1,
+  };
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
@@ -17,6 +25,7 @@ module.exports = async function handler(req, res) {
     const currentSeWoon = saju.luckCycle && saju.luckCycle.currentSeWoon;
     const dominant = saju.fiveElements.labels[saju.fiveElements.dominantElement];
     const weak = saju.fiveElements.labels[saju.fiveElements.weakestElement];
+    const funFacts = getFunFacts(year + month + day + Number(birthHour) + Number(birthMinute));
 
     const issue = String(recentIssue || "").trim();
     const issueLine =
@@ -59,11 +68,12 @@ module.exports = async function handler(req, res) {
       title: "평생 사주 분석",
       profile: { name, gender, calendarType },
       saju,
-      luckTips: [
-        "분기 1회 핵심 관계/재무/건강 우선순위를 다시 정리하세요.",
-        "대운 전환 전후 6개월은 큰 결정 속도를 의도적으로 늦추세요.",
-        "하루 10분 기록으로 감정-선택-결과 연결을 점검하세요.",
-      ],
+      luckGuide: {
+        today: "하루 10분 기록으로 감정-선택-결과 연결을 점검하세요.",
+        thisWeek: "이번 주 핵심 관계/재무/건강 우선순위를 1회 재정렬하세요.",
+        avoid: "대운 전환 전후에는 속도만 앞선 큰 결정을 피하세요.",
+      },
+      funFacts,
       report,
     });
   } catch (error) {

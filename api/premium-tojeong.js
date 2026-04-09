@@ -1,5 +1,13 @@
 const { getSajuFromInput } = require("../lib/saju");
 
+function getFunFacts(seed) {
+  const n = Math.abs(Number(seed) || 1);
+  return {
+    bestDate: (n % 27) + 1,
+    bestNumber: (n % 9) + 1,
+  };
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
@@ -16,6 +24,7 @@ module.exports = async function handler(req, res) {
     const currentDaYun = saju.luckCycle && saju.luckCycle.currentDaYun;
     const dominant = saju.fiveElements.labels[saju.fiveElements.dominantElement];
     const weak = saju.fiveElements.labels[saju.fiveElements.weakestElement];
+    const funFacts = getFunFacts(year + month + day + Number(birthHour) + Number(birthMinute));
 
     const report = [
       "2026 신토정비결 프리미엄 리포트",
@@ -40,11 +49,12 @@ module.exports = async function handler(req, res) {
       profile: { name, gender, calendarType },
       saju,
       summary: "2026년 핵심 전략: 상반기 구조 정비, 하반기 선택적 확장",
-      luckTips: [
-        "아침 10분 일정 정리로 하루 우선순위를 먼저 고정하세요.",
-        "중요 계약/결제는 당일 확정 대신 하루 유예 후 재검토하세요.",
-        "주 1회 지출 점검으로 불필요한 누수부터 줄이세요.",
-      ],
+      luckGuide: {
+        today: "아침 10분 일정 정리로 오늘 우선순위를 먼저 고정하세요.",
+        thisWeek: "중요 계약/결제는 당일 확정 대신 하루 유예 후 재검토하는 주간 리듬을 유지하세요.",
+        avoid: "감정이 큰 상태에서 즉시 결론 내리는 행동은 피하세요.",
+      },
+      funFacts,
       report,
     });
   } catch (error) {
