@@ -63,6 +63,23 @@
       border-radius: 12px;
       padding: 10px;
     }
+    .timeline-item.current {
+      border-color: rgba(250, 204, 21, 0.9);
+      box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.28), 0 10px 24px rgba(250, 204, 21, 0.14);
+      background: rgba(120, 53, 15, 0.18);
+    }
+    .current-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 9999px;
+      border: 1px solid rgba(250, 204, 21, 0.7);
+      background: rgba(250, 204, 21, 0.2);
+      color: #fde68a;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+    }
     @keyframes twinkle { from { opacity: .35; } to { opacity: .9; } }
     @keyframes flowMove {
       from { transform: translateX(-130%); }
@@ -167,12 +184,16 @@
         : "현재 대운 정보 계산 중입니다. 분기 단위로 재확인하며 흐름을 업데이트해 주세요.";
       const timelineItems = ((data.saju.luckCycle && data.saju.luckCycle.daYunList) || []).slice(0, 6);
       timeline.innerHTML = timelineItems
-        .map((item) =>
-          '<div class="timeline-item">' +
+        .map((item) => {
+          const isCurrent = currentDaYun && item.startYear === currentDaYun.startYear && item.endYear === currentDaYun.endYear;
+          return '<div class="timeline-item ' + (isCurrent ? "current" : "") + '">' +
+          '<div class="flex items-center justify-between gap-2">' +
           '<p class="text-xs font-semibold text-amber-200">' + (item.ganZhi || "-") + "</p>" +
+          (isCurrent ? '<span class="current-badge">현재 구간</span>' : "") +
+          "</div>" +
           '<p class="mt-1 text-xs text-stone-300">' + item.startYear + "~" + item.endYear + " · 나이 " + item.startAge + "~" + item.endAge + "</p>" +
-          "</div>"
-        )
+          "</div>";
+        })
         .join("");
       const longTermHeader = [
         "평생 사주 장기 관점 안내",
