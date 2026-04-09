@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>타로 리딩</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <main class="mx-auto max-w-5xl px-4 py-8">
+    <div class="mb-6 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">/tarot - 78장 랜덤 드로우</h1>
+      <div class="space-x-2 text-sm">
+        <a class="text-amber-300 underline" href="/saju">사주/궁합</a>
+        <a class="text-amber-300 underline" href="/dream">꿈해몽</a>
+      </div>
+    </div>
+
+    <section class="rounded-2xl border border-amber-300/30 bg-slate-900/70 p-4">
+      <form id="tarot-form" class="flex items-center gap-3">
+        <select name="drawCount" class="rounded-lg bg-slate-800 px-3 py-2">
+          <option value="1">1장</option>
+          <option value="3" selected>3장</option>
+          <option value="5">5장</option>
+        </select>
+        <button class="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-slate-900">카드 뽑기</button>
+        <p id="deck-info" class="text-sm text-slate-300"></p>
+      </form>
+      <div id="cards" class="mt-4 grid gap-4 md:grid-cols-3"></div>
+      <pre id="summary" class="mt-4 rounded-lg bg-black/30 p-3 text-xs"></pre>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("tarot-form");
+    const cardsEl = document.getElementById("cards");
+    const summaryEl = document.getElementById("summary");
+    const deckInfo = document.getElementById("deck-info");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      const res = await fetch("/api/tarot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ drawCount: Number(f.get("drawCount")) })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.message || "요청 실패");
+        return;
+      }
+      deckInfo.textContent = "총 덱 카드 수: " + data.totalDeckCount;
+      cardsEl.innerHTML = data.cards.map((card) => (
+        '<article class="rounded-xl border border-amber-300/30 bg-slate-900 p-3">' +
+        '<img src="' + card.image + '" alt="' + card.nameKo + '" class="h-56 w-full rounded-lg object-cover" />' +
+        '<h3 class="mt-2 font-semibold text-amber-200">' + card.nameKo + "</h3>" +
+        '<p class="mt-1 text-xs text-slate-300">' + (card.keywords || []).join(", ") + "</p>" +
+        "</article>"
+      )).join("");
+      summaryEl.textContent = data.summary;
+    });
+  </script>
+</body>
+</html>

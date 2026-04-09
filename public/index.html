@@ -3,149 +3,334 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>안보면 니 손해</title>
+  <title>프리미엄 운세 대시보드</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
     body {
       background:
-        radial-gradient(circle at 12% 18%, rgba(255, 194, 235, 0.45), transparent 36%),
-        radial-gradient(circle at 90% 10%, rgba(188, 220, 255, 0.48), transparent 34%),
-        linear-gradient(140deg, #f2f6ff 0%, #f6ecff 52%, #e9f5ff 100%);
+        radial-gradient(circle at 15% 18%, rgba(207, 168, 98, 0.18), transparent 36%),
+        radial-gradient(circle at 86% 12%, rgba(167, 131, 70, 0.16), transparent 35%),
+        linear-gradient(145deg, #050507 0%, #0c0e13 56%, #12131a 100%);
+      color: #ece7dd;
+      min-height: 100vh;
     }
-    .glass {
-      background: rgba(255, 255, 255, 0.52);
-      border: 1px solid rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 16px 40px rgba(86, 95, 131, 0.16);
+    .dashboard-card {
+      background: linear-gradient(145deg, rgba(27, 29, 37, 0.88), rgba(17, 18, 24, 0.92));
+      border: 1px solid rgba(207, 168, 98, 0.32);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.34);
+      backdrop-filter: blur(10px);
     }
-    .star {
-      position: fixed;
-      width: 8px;
-      height: 8px;
+    .gold-text {
+      color: #d7b26d;
+    }
+    .premium-badge {
+      border: 1px solid rgba(220, 184, 115, 0.52);
+      background: rgba(220, 184, 115, 0.16);
+      color: #f5db9e;
+    }
+    .category-tab {
+      border: 1px solid rgba(207, 168, 98, 0.35);
+      background: rgba(15, 16, 21, 0.78);
+      color: #d9d2c3;
+      transition: all 0.2s ease;
+    }
+    .category-tab:hover {
+      border-color: rgba(232, 198, 132, 0.8);
+      transform: translateY(-1px);
+    }
+    .category-tab.active {
+      background: linear-gradient(135deg, #7e6235, #d1a251);
+      color: #17120b;
+      border-color: rgba(226, 196, 134, 0.95);
+      box-shadow: 0 8px 22px rgba(158, 121, 59, 0.35);
+    }
+    .premium-tile {
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .premium-tile:hover {
+      transform: translateY(-2px);
+      border-color: rgba(235, 205, 142, 0.9);
+      box-shadow: 0 12px 26px rgba(8, 8, 10, 0.52);
+    }
+    .content-thumb {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid rgba(226, 196, 134, 0.4);
+      background: rgba(8, 9, 14, 0.55);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+      flex-shrink: 0;
+    }
+    .tarot-thumb {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid rgba(226, 196, 134, 0.38);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.32);
+      background: rgba(8, 9, 14, 0.5);
+    }
+    .palja-cell {
+      border: 1px solid rgba(226, 196, 134, 0.28);
+      border-radius: 12px;
+      background: rgba(9, 11, 16, 0.7);
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .element-chip {
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.92);
-      animation: twinkle 2.8s ease-in-out infinite;
-      pointer-events: none;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid rgba(226, 196, 134, 0.35);
+      background: rgba(9, 11, 16, 0.78);
+      color: #e7e5e4;
     }
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.35); }
+    .element-chip-strong {
+      border-color: rgba(215, 178, 109, 0.7);
+      box-shadow: 0 0 0 1px rgba(215, 178, 109, 0.25), 0 6px 18px rgba(215, 178, 109, 0.18);
     }
-    .tab.active {
-      background: linear-gradient(135deg, #7c67ff, #ff72ba);
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 8px 20px rgba(124, 103, 255, 0.35);
+    .element-chip-weak {
+      border-color: rgba(255, 122, 102, 0.8);
+      box-shadow: 0 0 0 1px rgba(255, 122, 102, 0.28), 0 6px 18px rgba(255, 122, 102, 0.22);
+      background: rgba(36, 12, 12, 0.65);
     }
-    .blur-lock {
-      position: relative;
-      overflow: hidden;
-    }
-    .blur-lock::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      backdrop-filter: blur(8px);
-      background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,0.58));
-    }
+    .element-wood { color: #57d17f; }
+    .element-fire { color: #ff7a66; }
+    .element-earth { color: #f2c66b; }
+    .element-metal { color: #d5d9e2; }
+    .element-water { color: #72b6ff; }
   </style>
 </head>
-<body class="min-h-screen text-slate-800">
-  <span class="star" style="left:7%;top:11%"></span>
-  <span class="star" style="left:84%;top:14%;animation-delay:.7s"></span>
-  <span class="star" style="left:16%;top:71%;animation-delay:1.2s"></span>
-  <span class="star" style="left:76%;top:77%;animation-delay:.35s"></span>
-
-  <main class="mx-auto w-full max-w-6xl px-4 pb-24 pt-8 md:px-8">
-    <section class="glass overflow-hidden rounded-3xl p-6 md:p-8">
+<body>
+  <main class="mx-auto w-full max-w-6xl px-4 pb-28 pt-8 md:px-8">
+    <section class="dashboard-card overflow-hidden rounded-3xl p-6 md:p-8">
       <div class="grid gap-6 md:grid-cols-2 md:items-center">
         <div>
-          <h1 class="text-3xl font-bold tracking-tight text-slate-900 md:text-5xl">안보면 니 손해</h1>
-          <p class="mt-3 text-sm text-slate-600">오늘의 운세 미리보기와 프리미엄 해석을 한 번에 확인하세요.</p>
-          <div class="mt-4 inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-indigo-700">
-            <i data-lucide="sparkles" class="h-3.5 w-3.5"></i> 1,200+ users today · 정확도 97.8%
+          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-amber-200/80">Premium Fortune</p>
+          <h1 class="mt-3 text-3xl font-bold tracking-tight text-stone-100 md:text-5xl">점신급 메인 대시보드</h1>
+          <div class="mt-2 flex gap-3 text-xs">
+            <a href="/saju" class="text-amber-200 underline">사주/궁합 전용</a>
+            <a href="/tarot" class="text-amber-200 underline">타로 전용</a>
+            <a href="/dream" class="text-amber-200 underline">꿈해몽 전용</a>
+          </div>
+          <p class="mt-4 text-sm leading-6 text-stone-300/85">회원님의 생년월일 기반으로 오늘의 흐름을 정밀 계산하고, 검증된 프리미엄 해석만 제공해드립니다.</p>
+          <div class="mt-5 inline-flex items-center gap-2 rounded-full border border-amber-300/35 bg-amber-200/10 px-3 py-1 text-xs font-semibold text-amber-100">
+            <i data-lucide="shield-check" class="h-3.5 w-3.5"></i> 신뢰도 98.2% · Premium Insight
           </div>
         </div>
-        <div class="rounded-2xl bg-white/60 p-4">
-          <p class="text-xs font-semibold text-slate-500">오늘의 무료 미리보기</p>
-          <div class="mt-2 flex items-center justify-between">
-            <span class="text-sm font-semibold text-indigo-700">연애운</span>
-            <span class="text-sm font-bold text-amber-500">4.6 ★★★★☆</span>
+        <div class="rounded-2xl border border-amber-200/30 bg-black/35 p-5">
+          <div class="flex items-center justify-between">
+            <p class="text-sm font-semibold text-stone-100">오늘의 운세 카드</p>
+            <span class="rounded-full border border-emerald-300/40 bg-emerald-300/10 px-2.5 py-1 text-xs font-semibold text-emerald-100">Personalized</span>
           </div>
-          <p class="mt-2 text-sm text-slate-700">오늘은 대화 운이 좋아서 마음을 먼저 열면 관계가 빠르게 가까워집니다.</p>
+          <p class="mt-3 text-xs text-stone-400">2026년 4월 9일</p>
+          <p class="mt-3 text-lg font-semibold leading-7 text-stone-100">집중력이 상승하는 날입니다. 중요한 결정을 오전에 처리하면 성과가 커집니다.</p>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
+            <div class="rounded-lg border border-amber-200/20 bg-stone-900/70 px-2 py-2"><p class="text-stone-400">재물</p><p class="mt-1 font-semibold gold-text">84</p></div>
+            <div class="rounded-lg border border-amber-200/20 bg-stone-900/70 px-2 py-2"><p class="text-stone-400">연애</p><p class="mt-1 font-semibold gold-text">79</p></div>
+            <div class="rounded-lg border border-amber-200/20 bg-stone-900/70 px-2 py-2"><p class="text-stone-400">건강</p><p class="mt-1 font-semibold gold-text">88</p></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="mt-6 grid gap-6 lg:grid-cols-2">
-      <div class="glass rounded-3xl p-5 md:p-6">
-        <form id="saju-form" class="space-y-4">
-          <input name="name" required placeholder="이름" class="w-full rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400" />
-          <input type="date" name="birthDate" required class="w-full rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400" />
+    <section class="mt-7">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-xl font-semibold text-stone-100">프리미엄 콘텐츠</h2>
+        <p class="text-xs text-stone-400">선택 시 상세 입력 혹은 결제 안내로 이동</p>
+      </div>
+      <div class="grid gap-4 md:grid-cols-2">
+        <button type="button" data-target="#saju-form-section" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="/assets/images/icon-lifetime-saju.png" alt="평생 사주 아이콘" class="content-thumb" />
+              <div>
+              <p class="text-base font-semibold text-stone-100">평생 사주</p>
+              <p class="mt-2 text-sm text-stone-300/85">타고난 기질과 인생 흐름을 장기 관점으로 분석합니다.</p>
+              </div>
+            </div>
+            <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
+          </div>
+        </button>
+        <button type="button" data-target="#payment-guide" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="/assets/images/icon-2026-sintojeong.png" alt="2026 신토정비결 아이콘" class="content-thumb" />
+              <div>
+              <p class="text-base font-semibold text-stone-100">2026 신토정비결</p>
+              <p class="mt-2 text-sm text-stone-300/85">월별 운세 변곡점을 확인하고 선제 대응 전략을 제시합니다.</p>
+              </div>
+            </div>
+            <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
+          </div>
+        </button>
+        <button type="button" data-target="#payment-guide" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="/assets/images/icon-premium-compatibility.png" alt="프리미엄 궁합 아이콘" class="content-thumb" />
+              <div>
+              <p class="text-base font-semibold text-stone-100">프리미엄 궁합</p>
+              <p class="mt-2 text-sm text-stone-300/85">두 사람의 기질, 갈등 포인트, 관계 성장 타이밍을 정밀 해석합니다.</p>
+              </div>
+            </div>
+            <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
+          </div>
+        </button>
+        <button type="button" data-target="#saju-form-section" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="/assets/images/icon-10year-daewoon.png" alt="10년 대운 분석 아이콘" class="content-thumb" />
+              <div>
+              <p class="text-base font-semibold text-stone-100">10년 대운 분석</p>
+              <p class="mt-2 text-sm text-stone-300/85">향후 10년의 기회와 리스크를 시기별로 구조화해 보여줍니다.</p>
+              </div>
+            </div>
+            <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <section id="saju-form-section" class="mt-7 grid gap-6 lg:grid-cols-2">
+      <div class="dashboard-card rounded-3xl p-5 md:p-6">
+        <h3 class="text-lg font-semibold text-stone-100">상세 입력 폼</h3>
+        <p class="mt-1 text-xs text-stone-400">콘텐츠별 맞춤 해석을 위해 기본 정보를 입력해 주세요.</p>
+        <form id="saju-form" class="mt-4 space-y-4">
+          <input name="name" required placeholder="이름" class="w-full rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-amber-200/80" />
+          <input type="date" name="birthDate" required class="w-full rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none focus:border-amber-200/80" />
           <div class="grid grid-cols-2 gap-3">
-            <input type="number" name="birthHour" min="0" max="23" required placeholder="시" class="rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400" />
-            <input type="number" name="birthMinute" min="0" max="59" required placeholder="분" class="rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400" />
+            <input type="number" name="birthHour" min="0" max="23" required placeholder="시" class="rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-amber-200/80" />
+            <input type="number" name="birthMinute" min="0" max="59" required placeholder="분" class="rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-amber-200/80" />
           </div>
           <div class="grid grid-cols-2 gap-3">
-            <select name="gender" required class="rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400"><option value="">성별</option><option value="male">남성</option><option value="female">여성</option></select>
-            <select name="calendarType" required class="rounded-xl border border-white/70 bg-white/80 px-4 py-3 outline-none focus:border-indigo-400"><option value="solar">양력</option><option value="lunar">음력</option></select>
+            <select name="gender" required class="rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none focus:border-amber-200/80">
+              <option value="">성별</option><option value="male">남성</option><option value="female">여성</option>
+            </select>
+            <select name="calendarType" required class="rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none focus:border-amber-200/80">
+              <option value="solar">양력</option><option value="lunar">음력</option>
+            </select>
           </div>
+          <select name="tone" class="w-full rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none focus:border-amber-200/80">
+            <option value="expert">문체: 전문가형</option>
+            <option value="comfort">문체: 상담형</option>
+          </select>
 
           <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            <button type="button" data-category="love" class="tab active rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">연애운</button>
-            <button type="button" data-category="business" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">사업운</button>
-            <button type="button" data-category="benefactor" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">귀인운</button>
-            <button type="button" data-category="career" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">직장운</button>
-            <button type="button" data-category="wealth" class="tab rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold">재물운</button>
+            <button type="button" data-category="love" class="category-tab active rounded-xl px-3 py-2 text-sm font-semibold">연애운</button>
+            <button type="button" data-category="business" class="category-tab rounded-xl px-3 py-2 text-sm font-semibold">사업운</button>
+            <button type="button" data-category="benefactor" class="category-tab rounded-xl px-3 py-2 text-sm font-semibold">귀인운</button>
+            <button type="button" data-category="career" class="category-tab rounded-xl px-3 py-2 text-sm font-semibold">직장운</button>
+            <button type="button" data-category="wealth" class="category-tab rounded-xl px-3 py-2 text-sm font-semibold">재물운</button>
           </div>
 
-          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white hover:bg-indigo-700">Continue Reading</button>
+          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-3 font-semibold text-stone-900 hover:from-amber-400 hover:to-yellow-200">상세 운세 분석 시작</button>
         </form>
-
-        <button class="mt-3 w-full rounded-xl bg-fuchsia-500 px-4 py-3 text-sm font-semibold text-white hover:bg-fuchsia-600">Unlock Full Fortune</button>
       </div>
 
       <div class="space-y-4">
-        <div class="glass rounded-3xl p-5">
-          <p id="loading" class="hidden rounded-xl bg-indigo-50 p-3 text-sm text-indigo-700">해석 중... 운세를 읽는 중입니다.</p>
-          <p id="empty-message" class="text-sm text-slate-600">정보를 입력하면 오늘 운세 결과가 표시됩니다.</p>
+        <div class="dashboard-card rounded-3xl p-5">
+          <p id="loading" class="hidden rounded-xl border border-amber-300/35 bg-amber-300/10 p-3 text-sm text-amber-100">해석 중... 프리미엄 리포트를 생성하고 있습니다.</p>
+          <p id="empty-message" class="text-sm text-stone-300/80">정보를 입력하면 맞춤 운세 결과가 표시됩니다.</p>
 
           <div id="result-content" class="hidden space-y-3">
-            <p id="category-line" class="text-sm font-semibold text-indigo-700"></p>
-            <p id="profile-line" class="text-sm text-slate-600"></p>
-            <p id="calendar-line" class="text-sm text-slate-600"></p>
+            <p id="category-line" class="text-sm font-semibold gold-text"></p>
+            <p id="profile-line" class="text-sm text-stone-300/90"></p>
+            <p id="calendar-line" class="text-sm text-stone-300/90"></p>
+            <p id="tone-line" class="text-sm text-stone-300/90"></p>
             <div class="grid grid-cols-2 gap-3">
-              <div class="rounded-xl bg-white/80 p-3"><p class="text-xs text-slate-500">연주</p><p id="year-pillar" class="text-xl font-bold"></p></div>
-              <div class="rounded-xl bg-white/80 p-3"><p class="text-xs text-slate-500">월주</p><p id="month-pillar" class="text-xl font-bold"></p></div>
-              <div class="rounded-xl bg-white/80 p-3"><p class="text-xs text-slate-500">일주</p><p id="day-pillar" class="text-xl font-bold"></p></div>
-              <div class="rounded-xl bg-white/80 p-3"><p class="text-xs text-slate-500">시주</p><p id="time-pillar" class="text-xl font-bold"></p></div>
+              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3"><p class="text-xs text-stone-400">연주</p><p id="year-pillar" class="text-xl font-bold text-stone-100"></p></div>
+              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3"><p class="text-xs text-stone-400">월주</p><p id="month-pillar" class="text-xl font-bold text-stone-100"></p></div>
+              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3"><p class="text-xs text-stone-400">일주</p><p id="day-pillar" class="text-xl font-bold text-stone-100"></p></div>
+              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3"><p class="text-xs text-stone-400">시주</p><p id="time-pillar" class="text-xl font-bold text-stone-100"></p></div>
             </div>
-            <div class="rounded-xl bg-white/80 p-4"><p class="text-xs text-slate-500">사주 8자</p><p id="eight-char" class="mt-1 text-lg font-semibold"></p></div>
-            <div class="rounded-xl bg-indigo-50 p-4"><p class="text-xs text-indigo-600">해석</p><p id="ai-fortune" class="mt-2 whitespace-pre-line leading-7 text-slate-700"></p></div>
+            <div class="rounded-xl border border-amber-200/20 bg-black/35 p-4">
+              <p class="text-xs text-stone-400">만세력 사주팔자 (천간/지지)</p>
+              <div id="palja-grid" class="mt-3 grid grid-cols-4 gap-2"></div>
+            </div>
+            <div class="rounded-xl border border-amber-200/20 bg-black/35 p-4"><p class="text-xs text-stone-400">사주 8자</p><p id="eight-char" class="mt-1 text-lg font-semibold text-stone-100"></p></div>
+            <div class="rounded-xl border border-amber-200/20 bg-black/35 p-4">
+              <p class="text-xs text-stone-400">오행 하이라이트</p>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <span id="dominant-element-chip" class="element-chip element-chip-strong">강한 오행: -</span>
+                <span id="weak-element-chip" class="element-chip element-chip-weak">보완 오행: -</span>
+              </div>
+            </div>
+            <div class="rounded-xl border border-amber-200/20 bg-black/35 p-4">
+              <p class="text-xs text-stone-400">오행 분포 차트</p>
+              <div class="mt-3 grid gap-3 md:grid-cols-2">
+                <div class="rounded-lg bg-black/35 p-3"><canvas id="five-element-radar" height="180"></canvas></div>
+                <div class="rounded-lg bg-black/35 p-3"><canvas id="five-element-bar" height="180"></canvas></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3">
+                <p class="text-xs text-stone-400">현재 대운</p>
+                <p id="current-daeyun" class="mt-1 text-sm font-semibold text-stone-100"></p>
+              </div>
+              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3">
+                <p class="text-xs text-stone-400">현재 세운</p>
+                <p id="current-sewoon" class="mt-1 text-sm font-semibold text-stone-100"></p>
+              </div>
+            </div>
+            <div class="rounded-xl border border-amber-300/25 bg-amber-300/10 p-4"><p class="text-xs gold-text">해석</p><p id="ai-fortune" class="mt-2 whitespace-pre-line leading-7 text-stone-200"></p></div>
           </div>
         </div>
 
-        <div class="glass blur-lock rounded-3xl p-5">
-          <p class="text-xs font-semibold text-fuchsia-600">Premium Locked</p>
-          <p class="mt-2 text-sm text-slate-700">상세 궁합, 시기별 운세, 맞춤 행동 가이드는 프리미엄에서 확인 가능합니다.</p>
-          <button class="mt-4 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white">Unlock Full Fortune</button>
+        <div id="payment-guide" class="dashboard-card rounded-3xl p-5">
+          <p class="text-xs font-semibold uppercase tracking-wider gold-text">Payment Guide</p>
+          <p class="mt-2 text-sm text-stone-200">해당 콘텐츠는 Premium 결제 후 이용 가능합니다. 결제 완료 시 상세 입력 단계로 자동 연결됩니다.</p>
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <img src="/assets/images/tarot-star.png" alt="타로 카드 Star" class="tarot-thumb" />
+            <img src="/assets/images/tarot-sun.png" alt="타로 카드 Sun" class="tarot-thumb" />
+          </div>
+          <ul class="mt-4 space-y-2 text-xs text-stone-400">
+            <li>• 2026 신토정비결: 연간 리포트 + 월별 상세 해석</li>
+            <li>• 프리미엄 궁합: 관계 진단 + 시기별 가이드</li>
+          </ul>
+          <button type="button" class="mt-4 w-full rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-3 text-sm font-semibold text-stone-900 hover:from-amber-400 hover:to-yellow-200">결제 안내 페이지로 이동</button>
         </div>
       </div>
     </section>
   </main>
 
-  <button class="fixed bottom-4 left-1/2 z-30 w-[92%] max-w-md -translate-x-1/2 rounded-2xl bg-gradient-to-r from-indigo-600 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-white shadow-2xl">Unlock Full Fortune</button>
+  <button class="fixed bottom-4 left-1/2 z-30 w-[92%] max-w-md -translate-x-1/2 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-300 px-5 py-3 text-sm font-semibold text-stone-900 shadow-2xl">Premium 시작하기</button>
 
   <script>
     const form = document.getElementById("saju-form");
-    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const tabs = Array.from(document.querySelectorAll(".category-tab"));
+    const premiumEntries = Array.from(document.querySelectorAll(".premium-entry"));
     const loading = document.getElementById("loading");
     const emptyMessage = document.getElementById("empty-message");
     const resultContent = document.getElementById("result-content");
     const submitBtn = document.getElementById("submit-btn");
+    const paljaGrid = document.getElementById("palja-grid");
+    const dominantElementChip = document.getElementById("dominant-element-chip");
+    const weakElementChip = document.getElementById("weak-element-chip");
+    let fiveElementRadarChart = null;
+    let fiveElementBarChart = null;
     let selectedCategory = "love";
+
+    const elementLabelMap = {
+      wood: "목",
+      fire: "화",
+      earth: "토",
+      metal: "금",
+      water: "수",
+    };
+    const elementColorMap = {
+      wood: "#57d17f",
+      fire: "#ff7a66",
+      earth: "#f2c66b",
+      metal: "#d5d9e2",
+      water: "#72b6ff",
+    };
 
     function setTab(category) {
       selectedCategory = category;
@@ -155,6 +340,138 @@
     }
 
     tabs.forEach((tab) => tab.addEventListener("click", () => setTab(tab.dataset.category)));
+    premiumEntries.forEach((entry) => {
+      entry.addEventListener("click", () => {
+        const targetSelector = entry.dataset.target;
+        if (!targetSelector) return;
+        const target = document.querySelector(targetSelector);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    function renderPaljaGrid(manse) {
+      if (!manse || !paljaGrid) return;
+      const cells = [
+        { label: "년간", char: manse.year.gan, element: manse.year.ganElement },
+        { label: "년지", char: manse.year.zhi, element: manse.year.zhiElement },
+        { label: "월간", char: manse.month.gan, element: manse.month.ganElement },
+        { label: "월지", char: manse.month.zhi, element: manse.month.zhiElement },
+        { label: "일간", char: manse.day.gan, element: manse.day.ganElement },
+        { label: "일지", char: manse.day.zhi, element: manse.day.zhiElement },
+        { label: "시간", char: manse.time.gan, element: manse.time.ganElement },
+        { label: "시지", char: manse.time.zhi, element: manse.time.zhiElement },
+      ];
+      paljaGrid.innerHTML = cells
+        .map(
+          (cell) =>
+            '<div class="palja-cell">' +
+            '<p class="text-[11px] text-stone-400">' + cell.label + "</p>" +
+            '<p class="mt-1 text-xl font-bold element-' + cell.element + '">' + cell.char + "</p>" +
+            '<p class="mt-1 text-[11px] text-stone-400">' + (elementLabelMap[cell.element] || "-") + "</p>" +
+            "</div>"
+        )
+        .join("");
+    }
+
+    function renderFiveElementCharts(fiveElements) {
+      if (!fiveElements || !window.Chart) return;
+      const labels = ["목", "화", "토", "금", "수"];
+      const keys = ["wood", "fire", "earth", "metal", "water"];
+      const values = keys.map((k) => (fiveElements.counts && fiveElements.counts[k]) || 0);
+      const colors = keys.map((k) => elementColorMap[k]);
+
+      const radarCanvas = document.getElementById("five-element-radar");
+      const barCanvas = document.getElementById("five-element-bar");
+      if (!radarCanvas || !barCanvas) return;
+
+      if (fiveElementRadarChart) fiveElementRadarChart.destroy();
+      if (fiveElementBarChart) fiveElementBarChart.destroy();
+
+      fiveElementRadarChart = new Chart(radarCanvas, {
+        type: "radar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "오행 점수",
+              data: values,
+              borderColor: "#d7b26d",
+              backgroundColor: "rgba(215, 178, 109, 0.22)",
+              pointBackgroundColor: "#f5db9e",
+              pointBorderColor: "#f5db9e",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#d6d3d1" } } },
+          scales: {
+            r: {
+              min: 0,
+              max: 5,
+              ticks: { stepSize: 1, color: "#a8a29e", backdropColor: "transparent" },
+              grid: { color: "rgba(214, 211, 209, 0.25)" },
+              angleLines: { color: "rgba(214, 211, 209, 0.22)" },
+              pointLabels: { color: "#e7e5e4" },
+            },
+          },
+        },
+      });
+
+      fiveElementBarChart = new Chart(barCanvas, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "오행 개수",
+              data: values,
+              backgroundColor: colors,
+              borderColor: colors,
+              borderWidth: 1,
+              borderRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#d6d3d1" } } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              suggestedMax: 5,
+              ticks: { stepSize: 1, color: "#a8a29e" },
+              grid: { color: "rgba(214, 211, 209, 0.2)" },
+            },
+            x: {
+              ticks: { color: "#e7e5e4" },
+              grid: { display: false },
+            },
+          },
+        },
+      });
+    }
+
+    function renderElementHighlights(fiveElements) {
+      if (!fiveElements) return;
+      const dominant = fiveElements.dominantElement;
+      const weak = fiveElements.weakestElement;
+      const dominantLabel = elementLabelMap[dominant] || "-";
+      const weakLabel = elementLabelMap[weak] || "-";
+      const dominantCount = fiveElements.counts && typeof fiveElements.counts[dominant] === "number" ? fiveElements.counts[dominant] : 0;
+      const weakCount = fiveElements.counts && typeof fiveElements.counts[weak] === "number" ? fiveElements.counts[weak] : 0;
+
+      if (dominantElementChip) {
+        dominantElementChip.textContent = "강한 오행: " + dominantLabel + " (" + dominantCount + ")";
+        dominantElementChip.className = "element-chip element-chip-strong element-" + dominant;
+      }
+      if (weakElementChip) {
+        weakElementChip.textContent = "보완 오행: " + weakLabel + " (" + weakCount + ")";
+        weakElementChip.className = "element-chip element-chip-weak element-" + weak;
+      }
+    }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -166,6 +483,7 @@
         birthMinute: Number(f.get("birthMinute")),
         gender: f.get("gender"),
         calendarType: f.get("calendarType"),
+        tone: f.get("tone"),
         category: selectedCategory,
       };
 
@@ -188,11 +506,23 @@
         document.getElementById("category-line").textContent = "선택 카테고리: " + data.categoryLabel;
         document.getElementById("profile-line").textContent = data.profile.name + " / " + (data.profile.gender === "male" ? "남성" : "여성");
         document.getElementById("calendar-line").textContent = "달력: " + (data.profile.calendarType === "solar" ? "양력" : "음력") + " | 양력 기준: " + data.saju.solarDateTime;
+        document.getElementById("tone-line").textContent = "해석 문체: " + (data.toneLabel || "전문가형");
         document.getElementById("year-pillar").textContent = data.saju.yearPillar;
         document.getElementById("month-pillar").textContent = data.saju.monthPillar;
         document.getElementById("day-pillar").textContent = data.saju.dayPillar;
         document.getElementById("time-pillar").textContent = data.saju.timePillar;
         document.getElementById("eight-char").textContent = data.saju.eightChar;
+        renderPaljaGrid(data.saju.manse);
+        renderElementHighlights(data.saju.fiveElements);
+        renderFiveElementCharts(data.saju.fiveElements);
+        const currentDaYun = data.saju.luckCycle && data.saju.luckCycle.currentDaYun;
+        const currentSeWoon = data.saju.luckCycle && data.saju.luckCycle.currentSeWoon;
+        document.getElementById("current-daeyun").textContent = currentDaYun
+          ? currentDaYun.ganZhi + " (" + currentDaYun.startYear + "~" + currentDaYun.endYear + ")"
+          : "계산 정보 없음";
+        document.getElementById("current-sewoon").textContent = currentSeWoon
+          ? currentSeWoon.ganZhi + " / " + currentSeWoon.year + "년"
+          : "계산 정보 없음";
         document.getElementById("ai-fortune").textContent = data.aiFortune;
       } catch (err) {
         alert(err.message);

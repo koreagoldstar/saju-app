@@ -2,6 +2,9 @@
   "version": 2,
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/saju", "dest": "/public/saju/index.html" },
+    { "src": "/tarot", "dest": "/public/tarot/index.html" },
+    { "src": "/dream", "dest": "/public/dream/index.html" },
     { "src": "/(.*)", "dest": "/public/index.html" }
   ]
 }

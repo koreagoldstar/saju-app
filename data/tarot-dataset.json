@@ -1,0 +1,50 @@
+{
+  "majorArcana": [
+    { "id": "M00", "name": "The Fool", "nameKo": "바보", "keywords": ["시작", "자유", "가능성"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M01", "name": "The Magician", "nameKo": "마법사", "keywords": ["의지", "실행", "집중"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M02", "name": "The High Priestess", "nameKo": "여사제", "keywords": ["직관", "내면", "통찰"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M03", "name": "The Empress", "nameKo": "여황제", "keywords": ["풍요", "돌봄", "확장"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M04", "name": "The Emperor", "nameKo": "황제", "keywords": ["질서", "책임", "안정"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M05", "name": "The Hierophant", "nameKo": "교황", "keywords": ["전통", "학습", "원칙"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M06", "name": "The Lovers", "nameKo": "연인", "keywords": ["관계", "선택", "조화"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M07", "name": "The Chariot", "nameKo": "전차", "keywords": ["돌파", "통제", "전진"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M08", "name": "Strength", "nameKo": "힘", "keywords": ["인내", "용기", "회복"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M09", "name": "The Hermit", "nameKo": "은둔자", "keywords": ["성찰", "탐구", "정리"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M10", "name": "Wheel of Fortune", "nameKo": "운명의 수레바퀴", "keywords": ["전환", "흐름", "기회"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M11", "name": "Justice", "nameKo": "정의", "keywords": ["균형", "판단", "책임"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M12", "name": "The Hanged Man", "nameKo": "매달린 사람", "keywords": ["관점", "유예", "전환"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M13", "name": "Death", "nameKo": "죽음", "keywords": ["종료", "재출발", "변화"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M14", "name": "Temperance", "nameKo": "절제", "keywords": ["조율", "중용", "회복"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M15", "name": "The Devil", "nameKo": "악마", "keywords": ["집착", "유혹", "경계"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M16", "name": "The Tower", "nameKo": "탑", "keywords": ["변동", "붕괴", "재정비"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M17", "name": "The Star", "nameKo": "별", "keywords": ["희망", "영감", "치유"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M18", "name": "The Moon", "nameKo": "달", "keywords": ["감정", "불확실", "직감"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M19", "name": "The Sun", "nameKo": "태양", "keywords": ["성공", "활력", "명확"], "image": "/assets/images/tarot-sun.png" },
+    { "id": "M20", "name": "Judgement", "nameKo": "심판", "keywords": ["결론", "각성", "부름"], "image": "/assets/images/tarot-star.png" },
+    { "id": "M21", "name": "The World", "nameKo": "세계", "keywords": ["완성", "성취", "확장"], "image": "/assets/images/tarot-sun.png" }
+  ],
+  "minorArcana": {
+    "suits": [
+      { "key": "wands", "nameKo": "완드", "element": "화", "image": "/assets/images/tarot-sun.png" },
+      { "key": "cups", "nameKo": "컵", "element": "수", "image": "/assets/images/tarot-star.png" },
+      { "key": "swords", "nameKo": "소드", "element": "풍", "image": "/assets/images/tarot-sun.png" },
+      { "key": "pentacles", "nameKo": "펜타클", "element": "토", "image": "/assets/images/tarot-star.png" }
+    ],
+    "ranks": [
+      { "key": "ace", "nameKo": "에이스", "keywords": ["시작", "씨앗", "가능성"] },
+      { "key": "two", "nameKo": "2", "keywords": ["균형", "선택", "조율"] },
+      { "key": "three", "nameKo": "3", "keywords": ["확장", "협업", "성장"] },
+      { "key": "four", "nameKo": "4", "keywords": ["안정", "기반", "보수"] },
+      { "key": "five", "nameKo": "5", "keywords": ["변동", "긴장", "학습"] },
+      { "key": "six", "nameKo": "6", "keywords": ["회복", "조화", "균형"] },
+      { "key": "seven", "nameKo": "7", "keywords": ["전략", "방어", "선별"] },
+      { "key": "eight", "nameKo": "8", "keywords": ["집중", "속도", "몰입"] },
+      { "key": "nine", "nameKo": "9", "keywords": ["성과", "점검", "마무리"] },
+      { "key": "ten", "nameKo": "10", "keywords": ["완결", "부담", "전환"] },
+      { "key": "page", "nameKo": "페이지", "keywords": ["메시지", "학습", "탐색"] },
+      { "key": "knight", "nameKo": "나이트", "keywords": ["행동", "진행", "추진"] },
+      { "key": "queen", "nameKo": "퀸", "keywords": ["돌봄", "통찰", "관리"] },
+      { "key": "king", "nameKo": "킹", "keywords": ["리더십", "통제", "책임"] }
+    ]
+  }
+}
