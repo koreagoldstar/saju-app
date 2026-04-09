@@ -159,6 +159,7 @@
           <select name="gender" class="rounded-lg bg-slate-800 px-3 py-2"><option value="male">남성</option><option value="female">여성</option></select>
           <select name="calendarType" class="rounded-lg bg-slate-800 px-3 py-2"><option value="solar">양력</option><option value="lunar">음력</option></select>
         </div>
+        <textarea name="recentIssue" rows="3" placeholder="최근 이슈 사항 (예: 이직 고민, 관계 갈등, 투자 결정 등)" class="w-full rounded-lg bg-slate-800 px-3 py-2"></textarea>
         <button class="w-full rounded-lg bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-2 font-semibold text-slate-900">평생 사주 리포트 생성</button>
       </form>
 
@@ -214,7 +215,7 @@
 
     function extractSections(reportText) {
       const lines = String(reportText || "").split("\n");
-      const sectionTitles = ["인생 전반 흐름", "시기별 변화 포인트", "분야별 장기 운영 관점", "지속 점검 가이드"];
+      const sectionTitles = ["인생 전반 흐름", "시기별 변화 포인트", "최근 이슈 맞춤 분석", "분야별 장기 운영 관점", "지속 점검 가이드"];
       const sections = [];
       let current = null;
       lines.forEach((line) => {
@@ -273,7 +274,8 @@
         birthHour: Number(f.get("birthHour")),
         birthMinute: Number(f.get("birthMinute")),
         gender: f.get("gender"),
-        calendarType: f.get("calendarType")
+        calendarType: f.get("calendarType"),
+        recentIssue: f.get("recentIssue")
       };
       const res = await fetch("/api/premium-lifetime", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json();

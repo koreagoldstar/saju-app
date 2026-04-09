@@ -130,7 +130,7 @@ app.post("/api/compatibility", (req, res) => {
 
 app.post("/api/premium-tojeong", (req, res) => {
   try {
-    const { name, birthDate, birthHour, birthMinute, gender, calendarType } = req.body || {};
+    const { name, birthDate, birthHour, birthMinute, gender, calendarType, recentIssue } = req.body || {};
     if (!name || !birthDate || birthHour === undefined || birthMinute === undefined || !gender || !calendarType) {
       return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
     }
@@ -181,6 +181,12 @@ app.post("/api/premium-lifetime", (req, res) => {
     const currentSeWoon = saju.luckCycle && saju.luckCycle.currentSeWoon;
     const dominant = saju.fiveElements.labels[saju.fiveElements.dominantElement];
     const weak = saju.fiveElements.labels[saju.fiveElements.weakestElement];
+    const issue = String(recentIssue || "").trim();
+    const issueLine =
+      issue.length > 0
+        ? "입력하신 최근 이슈는 \"" + issue + "\" 입니다. 이 사안은 지금 시기의 판단 균형(속도 vs 안정성)을 시험하는 주제이므로, 단기 결론보다 2~4주 단위 점검 방식이 유리합니다."
+        : "최근 이슈가 입력되지 않아 일반 장기 흐름 기준으로 분석합니다. 이후 이슈를 입력하면 훨씬 구체적인 맞춤 해석이 가능합니다.";
+
     const report = [
       "인생 전반 흐름",
       name + "님의 평생 사주 분석은 " + saju.dayPillar + " 일주를 중심축으로 삼아, 단기 사건보다 장기 패턴을 읽는 방식으로 구성됩니다.",
@@ -193,6 +199,11 @@ app.post("/api/premium-lifetime", (req, res) => {
       "강한 기운은 결정·행동·집중에서 힘을 제공하지만, 과해지면 시야가 좁아질 수 있어 균형 장치가 필요합니다.",
       "보완 기운은 현재 부족하게 보일 수 있으나, 의식적 습관으로 충분히 채울 수 있는 영역입니다. 예를 들어 일정 관리, 기록, 휴식, 관계 조율 같은 실천이 약한 기운을 실제 역량으로 전환합니다.",
       "세운 " + (currentSeWoon ? currentSeWoon.ganZhi + " (" + currentSeWoon.year + "년)" : "분석 중") + " 구간에서는 체감 속도보다 안정성과 회복 탄성이 중요하며, 이 시기 전략이 다음 대운 초반 성과를 좌우할 가능성이 큽니다.",
+      "",
+      "최근 이슈 맞춤 분석",
+      issueLine,
+      "최근 이슈가 관계 문제라면 대화 시점과 표현 강도를 분리해 조절하는 것이 우선입니다. 재무 문제라면 위험 노출을 줄이는 선택부터 선행하고, 진로 문제라면 실험 범위를 작게 나누어 실행 데이터를 먼저 확보하는 전략이 유효합니다.",
+      "핵심은 '지금 당장 정답 찾기'보다, 일정한 점검 주기로 가설을 업데이트하는 방식입니다. 이 과정이 누적될수록 평생 흐름의 안정성이 높아집니다.",
       "",
       "분야별 장기 운영 관점",
       "관계 영역에서는 감정 강도보다 신뢰 축적 속도가 중요합니다. 중요한 갈등은 즉시 해결보다 사실 확인-정리-재대화 순서가 장기적으로 유리합니다.",
