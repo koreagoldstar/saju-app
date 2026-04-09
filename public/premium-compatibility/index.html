@@ -67,6 +67,12 @@
         <input type="number" name="partnerMinute" min="0" max="59" required placeholder="상대 분" class="rounded-lg bg-slate-800 px-3 py-2" />
         <select name="partnerGender" class="rounded-lg bg-slate-800 px-3 py-2"><option value="male">상대 성별 남성</option><option value="female">상대 성별 여성</option></select>
         <select name="partnerCalendarType" class="rounded-lg bg-slate-800 px-3 py-2"><option value="solar">상대 달력 양력</option><option value="lunar">상대 달력 음력</option></select>
+        <select name="relationType" class="md:col-span-2 rounded-lg bg-slate-800 px-3 py-2">
+          <option value="dating">관계 모드: 연애</option>
+          <option value="married">관계 모드: 부부</option>
+          <option value="some">관계 모드: 썸</option>
+          <option value="reunion">관계 모드: 재회</option>
+        </select>
         <button class="md:col-span-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-2 font-semibold text-slate-900">프리미엄 궁합 보기</button>
       </form>
 
@@ -107,7 +113,8 @@
         meGender: f.get("meGender"), meCalendarType: f.get("meCalendarType"),
         partnerName: f.get("partnerName"), partnerYear, partnerMonth, partnerDay,
         partnerHour: Number(f.get("partnerHour")), partnerMinute: Number(f.get("partnerMinute")),
-        partnerGender: f.get("partnerGender"), partnerCalendarType: f.get("partnerCalendarType")
+        partnerGender: f.get("partnerGender"), partnerCalendarType: f.get("partnerCalendarType"),
+        relationType: f.get("relationType")
       };
       const res = await fetch("/api/compatibility", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json();
@@ -126,7 +133,7 @@
         ? data.collisions.map((c) => c.element + "(" + (c.gap > 0 ? "+" : "") + c.gap + ")").join(", ")
         : "큰 충돌 요소 없음";
       result.textContent =
-        "감성 궁합 해석\n" +
+        (data.relationTypeLabel || "관계") + " 모드 감성 궁합 해석\n" +
         (data.emotionalTone || "-") +
         "\n\n관계의 강점\n" +
         (data.resonancePoint || "-") +
