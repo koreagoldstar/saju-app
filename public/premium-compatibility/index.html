@@ -206,6 +206,9 @@
       document.body.style.setProperty("--mx", x + "%");
       document.body.style.setProperty("--my", y + "%");
     });
+    function sortDaYunByAge(list) {
+      return [...(list || [])].sort((a, b) => Number(a.startAge) - Number(b.startAge));
+    }
     function renderCharts(data) {
       if (!window.Chart || !data || !data.me || !data.partner) return;
       const meCounts = (((data.me || {}).saju || {}).fiveElements || {}).counts || {};
@@ -247,8 +250,8 @@
           scales: { r: { ticks: { color: "#9ca3af", backdropColor: "transparent" }, pointLabels: { color: "#d1d5db" } } },
         },
       });
-      const meFlow = ((((data.me || {}).saju || {}).luckCycle || {}).daYunList || []).slice(0, 6);
-      const labels = meFlow.map((x) => String(x.startYear).slice(2) + "~" + String(x.endYear).slice(2));
+      const meFlow = sortDaYunByAge(((((data.me || {}).saju || {}).luckCycle || {}).daYunList || [])).slice(0, 6);
+      const labels = meFlow.map((x) => String(x.startAge) + "~" + String(x.endAge) + "세");
       const values = meFlow.map((x, i) => 56 + ((Number(x.startAge) || i * 4) % 39));
       const current = (((data.me || {}).saju || {}).luckCycle || {}).currentDaYun;
       const currentIndex = meFlow.findIndex((x) => current && x.startYear === current.startYear && x.endYear === current.endYear);

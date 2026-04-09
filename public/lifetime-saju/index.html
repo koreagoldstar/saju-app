@@ -272,6 +272,9 @@
       document.body.style.setProperty("--mx", x + "%");
       document.body.style.setProperty("--my", y + "%");
     });
+    function sortDaYunByAge(list) {
+      return [...(list || [])].sort((a, b) => Number(a.startAge) - Number(b.startAge));
+    }
 
     function extractSections(reportText) {
       const lines = String(reportText || "").split("\n");
@@ -329,8 +332,8 @@
       if (!window.Chart || !saju) return;
       const counts = (saju.fiveElements && saju.fiveElements.counts) || {};
       const radarData = ELEMENT_ORDER.map((k) => counts[k] || 0);
-      const flowSrc = ((saju.luckCycle && saju.luckCycle.daYunList) || []).slice(0, 8);
-      const flowLabels = flowSrc.map((x) => String(x.startYear).slice(2) + "~" + String(x.endYear).slice(2));
+      const flowSrc = sortDaYunByAge((saju.luckCycle && saju.luckCycle.daYunList) || []).slice(0, 8);
+      const flowLabels = flowSrc.map((x) => String(x.startAge) + "~" + String(x.endAge) + "세");
       const flowData = flowSrc.map((x, i) => 57 + ((Number(x.startAge) || i * 4) % 38));
       const current = saju.luckCycle && saju.luckCycle.currentDaYun;
       const currentIndex = flowSrc.findIndex((x) => current && x.startYear === current.startYear && x.endYear === current.endYear);
@@ -416,7 +419,7 @@
       } else {
         nextShift.textContent = "다음 전환 시점은 입력 후 자동 계산됩니다.";
       }
-      const timelineItems = ((data.saju.luckCycle && data.saju.luckCycle.daYunList) || []).slice(0, 6);
+      const timelineItems = sortDaYunByAge((data.saju.luckCycle && data.saju.luckCycle.daYunList) || []).slice(0, 6);
       timeline.innerHTML = timelineItems
         .map((item) => {
           const isCurrent = currentDaYun && item.startYear === currentDaYun.startYear && item.endYear === currentDaYun.endYear;

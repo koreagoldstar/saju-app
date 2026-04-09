@@ -147,6 +147,9 @@
       document.body.style.setProperty("--mx", x + "%");
       document.body.style.setProperty("--my", y + "%");
     });
+    function sortDaYunByAge(list) {
+      return [...(list || [])].sort((a, b) => Number(a.startAge) - Number(b.startAge));
+    }
     function renderCharts(saju, daYunTimeline) {
       if (!window.Chart || !saju) return;
       const counts = (saju.fiveElements && saju.fiveElements.counts) || {};
@@ -177,8 +180,8 @@
           scales: { r: { ticks: { color: "#9ca3af", backdropColor: "transparent" }, pointLabels: { color: "#d1d5db" } } },
         },
       });
-      const src = (daYunTimeline || []).slice(0, 8);
-      const labels = src.map((x) => String(x.startYear).slice(2) + "~" + String(x.endYear).slice(2));
+      const src = sortDaYunByAge(daYunTimeline || []).slice(0, 8);
+      const labels = src.map((x) => String(x.startAge) + "~" + String(x.endAge) + "세");
       const values = src.map((x, i) => 58 + ((Number(x.startAge) || i * 4) % 36));
       const current = saju.luckCycle && saju.luckCycle.currentDaYun;
       const currentIndex = src.findIndex((x) => current && x.startYear === current.startYear && x.endYear === current.endYear);
@@ -233,13 +236,14 @@
         "피해야 할 행동: " + (guide.avoid || "-"),
       ].map((x) => '<li>• ' + x + '</li>').join("");
       funFacts.textContent = "이번달 나에게 가장 좋은 날짜: " + ((data.funFacts && data.funFacts.bestDate) || "-") + "일 · 나에게 가장 좋은 숫자: " + ((data.funFacts && data.funFacts.bestNumber) || "-");
-      timeline.innerHTML = (data.daYunTimeline || []).map((x) =>
+      const orderedTimeline = sortDaYunByAge(data.daYunTimeline || []);
+      timeline.innerHTML = orderedTimeline.map((x) =>
         '<div class="rounded-lg border border-amber-300/20 bg-black/30 p-2 text-xs">' +
         '<p class="font-semibold text-amber-200">' + (x.ganZhi || "-") + "</p>" +
         '<p class="text-stone-300">' + x.startYear + "~" + x.endYear + " · 나이 " + x.startAge + "~" + x.endAge + "</p>" +
         "</div>"
       ).join("");
-      renderCharts(data.saju, data.daYunTimeline);
+      renderCharts(data.saju, orderedTimeline);
       result.textContent = data.report;
     });
   </script>

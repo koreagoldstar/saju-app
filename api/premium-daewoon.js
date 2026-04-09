@@ -30,6 +30,14 @@ function interpretDaYunPhase(idx, item, currentDaYun) {
   return `${base}\n- ${phaseText}`;
 }
 
+function sortDaYunByAge(list) {
+  return [...(list || [])].sort((a, b) => {
+    const aAge = Number(a && a.startAge);
+    const bAge = Number(b && b.startAge);
+    return aAge - bAge;
+  });
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
@@ -44,7 +52,7 @@ module.exports = async function handler(req, res) {
     const [year, month, day] = birthDate.split("-").map(Number);
     const saju = getSajuFromInput(year, month, day, Number(birthHour), Number(birthMinute), calendarType === "lunar", gender);
     const daYunList = (saju.luckCycle && saju.luckCycle.daYunList) || [];
-    const top10 = daYunList.slice(0, 10);
+    const top10 = sortDaYunByAge(daYunList).slice(0, 10);
     const currentDaYun = saju.luckCycle && saju.luckCycle.currentDaYun;
     const currentYear = saju.luckCycle && saju.luckCycle.currentYear;
     const counts = (saju.fiveElements && saju.fiveElements.counts) || {};
