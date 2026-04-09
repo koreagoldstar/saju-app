@@ -68,6 +68,50 @@
       box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.28), 0 10px 24px rgba(250, 204, 21, 0.14);
       background: rgba(120, 53, 15, 0.18);
     }
+    .summary-card {
+      border: 1px solid rgba(250, 204, 21, 0.28);
+      border-radius: 12px;
+      background: rgba(2, 6, 23, 0.62);
+      padding: 10px;
+    }
+    .report-section {
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 12px;
+      background: rgba(2, 6, 23, 0.52);
+      overflow: hidden;
+    }
+    .report-toggle {
+      width: 100%;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fde68a;
+      background: rgba(15, 23, 42, 0.72);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+    .report-toggle .arrow {
+      transition: transform .2s ease;
+    }
+    .report-section[data-open="false"] .arrow {
+      transform: rotate(-90deg);
+    }
+    .report-body {
+      padding: 10px 12px;
+      white-space: pre-wrap;
+      font-size: 12px;
+      line-height: 1.65;
+      color: #d6d3d1;
+      max-height: 360px;
+      overflow: auto;
+    }
+    .report-section[data-open="false"] .report-body {
+      display: none;
+    }
     .current-badge {
       display: inline-flex;
       align-items: center;
@@ -138,18 +182,23 @@
           <p class="text-xs text-stone-400">장기 대운 타임라인 (핵심 구간)</p>
           <div id="timeline" class="mt-2 space-y-2"></div>
         </div>
-        <pre id="result" class="mt-3 max-h-[360px] overflow-auto rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap"></pre>
+        <div class="mt-3 rounded-lg bg-black/30 p-3">
+          <p class="text-xs text-stone-400">핵심 요약</p>
+          <div id="summary-cards" class="mt-2 grid gap-2 md:grid-cols-3"></div>
+        </div>
+        <div id="report-sections" class="mt-3 space-y-2"></div>
       </div>
     </section>
   </main>
   <script>
     const form = document.getElementById("form");
-    const result = document.getElementById("result");
     const year = document.getElementById("year");
     const day = document.getElementById("day");
     const timeline = document.getElementById("timeline");
     const longtermNote = document.getElementById("longterm-note");
     const nextShift = document.getElementById("next-shift");
+    const summaryCards = document.getElementById("summary-cards");
+    const reportSections = document.getElementById("report-sections");
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) entry.target.classList.add("in");
@@ -162,6 +211,59 @@
       document.body.style.setProperty("--mx", x + "%");
       document.body.style.setProperty("--my", y + "%");
     });
+
+    function extractSections(reportText) {
+      const lines = String(reportText || "").split("\n");
+      const sectionTitles = ["인생 전반 흐름", "시기별 변화 포인트", "분야별 장기 운영 관점", "지속 점검 가이드"];
+      const sections = [];
+      let current = null;
+      lines.forEach((line) => {
+        if (sectionTitles.includes(line.trim())) {
+          if (current) sections.push(current);
+          current = { title: line.trim(), content: [] };
+        } else if (current) {
+          current.content.push(line);
+        }
+      });
+      if (current) sections.push(current);
+      return sections;
+    }
+
+    function renderSummaryCards(sections) {
+      if (!summaryCards) return;
+      const picks = sections.slice(0, 3).map((s) => (s.content || []).find((x) => x.trim()) || "요약 데이터 없음");
+      summaryCards.innerHTML = picks
+        .map((text, idx) =>
+          '<div class="summary-card">' +
+          '<p class="text-[11px] text-amber-200">요약 ' + (idx + 1) + "</p>" +
+          '<p class="mt-1 text-xs leading-6 text-stone-200">' + text + "</p>" +
+          "</div>"
+        )
+        .join("");
+    }
+
+    function renderCollapsibleSections(sections) {
+      if (!reportSections) return;
+      reportSections.innerHTML = sections
+        .map((section, idx) =>
+          '<div class="report-section" data-open="' + (idx === 0 ? "true" : "false") + '">' +
+          '<button type="button" class="report-toggle">' +
+          '<span>' + section.title + "</span>" +
+          '<span class="arrow">▾</span>' +
+          "</button>" +
+          '<div class="report-body">' + section.content.join("\n") + "</div>" +
+          "</div>"
+        )
+        .join("");
+
+      reportSections.querySelectorAll(".report-toggle").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const container = btn.closest(".report-section");
+          const isOpen = container.getAttribute("data-open") === "true";
+          container.setAttribute("data-open", isOpen ? "false" : "true");
+        });
+      });
+    }
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const f = new FormData(form);
@@ -203,7 +305,9 @@
           "</div>";
         })
         .join("");
-      result.textContent = data.report;
+      const sections = extractSections(data.report);
+      renderSummaryCards(sections);
+      renderCollapsibleSections(sections);
     });
   </script>
 </body>
