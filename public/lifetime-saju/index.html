@@ -12,6 +12,15 @@
         radial-gradient(circle at 84% 82%, rgba(100, 116, 139, 0.2), transparent 34%),
         #020617;
     }
+    .parallax-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(460px circle at var(--mx, 50%) var(--my, 50%), rgba(250, 204, 21, 0.16), transparent 65%),
+        radial-gradient(340px circle at calc(var(--mx, 50%) + 8%) calc(var(--my, 50%) + 10%), rgba(59, 130, 246, 0.11), transparent 70%);
+      transition: background-position 0.08s linear;
+    }
     .spark::before,
     .spark::after {
       content: "";
@@ -36,6 +45,7 @@
   </style>
 </head>
 <body class="spark min-h-screen text-slate-100">
+  <div class="parallax-glow"></div>
   <main class="mx-auto max-w-5xl px-4 py-8">
     <a href="/" class="text-sm text-amber-300 underline">메인으로</a>
     <section class="reveal mt-3 overflow-hidden rounded-3xl border border-amber-300/30 bg-gradient-to-br from-slate-900 to-slate-950 p-6">
@@ -86,6 +96,12 @@
       });
     }, { threshold: 0.12 });
     document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+    window.addEventListener("mousemove", (e) => {
+      const x = (e.clientX / window.innerWidth) * 100;
+      const y = (e.clientY / window.innerHeight) * 100;
+      document.body.style.setProperty("--mx", x + "%");
+      document.body.style.setProperty("--my", y + "%");
+    });
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const f = new FormData(form);
