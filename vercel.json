@@ -9,6 +9,9 @@
     { "src": "/sintojeong-2026", "dest": "/public/sintojeong-2026/index.html" },
     { "src": "/premium-compatibility", "dest": "/public/premium-compatibility/index.html" },
     { "src": "/daewoon-10year", "dest": "/public/daewoon-10year/index.html" },
+    { "src": "/tomorrow-fortune", "dest": "/public/tomorrow-fortune/index.html" },
+    { "src": "/zodiac-fortune", "dest": "/public/zodiac-fortune/index.html" },
+    { "src": "/star-sign-fortune", "dest": "/public/star-sign-fortune/index.html" },
     { "src": "/(.*)", "dest": "/public/index.html" }
   ]
 }

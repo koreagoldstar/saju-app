@@ -7,7 +7,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { name, birthDate, birthHour, birthMinute, gender, calendarType, category, tone } = req.body || {};
+    const { name, birthDate, birthHour, birthMinute, gender, calendarType, category } = req.body || {};
     if (!name || !birthDate || birthHour === undefined || birthMinute === undefined || !gender || !calendarType) {
       return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
     }
@@ -22,7 +22,7 @@ module.exports = async function handler(req, res) {
       gender,
       calendarType,
       category,
-      tone,
+      tone: "expert",
       saju,
       ...saju,
     });
@@ -31,8 +31,6 @@ module.exports = async function handler(req, res) {
       profile: { name, gender, calendarType },
       category: generated.category,
       categoryLabel: generated.categoryLabel,
-      tone: generated.tone,
-      toneLabel: generated.toneLabel,
       saju,
       keywords: generated.keywords,
       aiProvider: generated.aiProvider,

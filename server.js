@@ -24,10 +24,13 @@ app.get("/lifetime-saju", (req, res) => res.sendFile(path.join(__dirname, "publi
 app.get("/sintojeong-2026", (req, res) => res.sendFile(path.join(__dirname, "public", "sintojeong-2026", "index.html")));
 app.get("/premium-compatibility", (req, res) => res.sendFile(path.join(__dirname, "public", "premium-compatibility", "index.html")));
 app.get("/daewoon-10year", (req, res) => res.sendFile(path.join(__dirname, "public", "daewoon-10year", "index.html")));
+app.get("/tomorrow-fortune", (req, res) => res.sendFile(path.join(__dirname, "public", "tomorrow-fortune", "index.html")));
+app.get("/zodiac-fortune", (req, res) => res.sendFile(path.join(__dirname, "public", "zodiac-fortune", "index.html")));
+app.get("/star-sign-fortune", (req, res) => res.sendFile(path.join(__dirname, "public", "star-sign-fortune", "index.html")));
 
 app.post("/api/saju", async (req, res) => {
   try {
-    const { name, birthDate, birthHour, birthMinute, gender, calendarType, category, tone } = req.body || {};
+    const { name, birthDate, birthHour, birthMinute, gender, calendarType, category } = req.body || {};
 
     if (!name || !birthDate || birthHour === undefined || birthMinute === undefined || !gender || !calendarType) {
       return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
@@ -43,7 +46,7 @@ app.post("/api/saju", async (req, res) => {
       gender,
       calendarType,
       category,
-      tone,
+      tone: "expert",
       saju,
       ...saju,
     });
@@ -52,8 +55,6 @@ app.post("/api/saju", async (req, res) => {
       profile: { name, gender, calendarType },
       category: generated.category,
       categoryLabel: generated.categoryLabel,
-      tone: generated.tone,
-      toneLabel: generated.toneLabel,
       saju,
       keywords: generated.keywords,
       aiProvider: generated.aiProvider,
@@ -198,7 +199,7 @@ app.post("/api/premium-daewoon", (req, res) => {
 
 app.post("/api/premium-lifetime", (req, res) => {
   try {
-    const { name, birthDate, birthHour, birthMinute, gender, calendarType } = req.body || {};
+    const { name, birthDate, birthHour, birthMinute, gender, calendarType, recentIssue } = req.body || {};
     if (!name || !birthDate || birthHour === undefined || birthMinute === undefined || !gender || !calendarType) {
       return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
     }
@@ -247,6 +248,70 @@ app.post("/api/premium-lifetime", (req, res) => {
     return res.json({ title: "평생 사주 분석", profile: { name, gender, calendarType }, saju, report });
   } catch (error) {
     return res.status(500).json({ message: "평생 사주 분석 중 오류가 발생했습니다.", detail: error.message });
+  }
+});
+
+app.post("/api/premium-tomorrow", (req, res) => {
+  try {
+    const { name, birthDate, birthHour, birthMinute, gender, calendarType } = req.body || {};
+    if (!name || !birthDate || birthHour === undefined || birthMinute === undefined || !gender || !calendarType) {
+      return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
+    }
+    const [year, month, day] = birthDate.split("-").map(Number);
+    const saju = getSajuFromInput(year, month, day, Number(birthHour), Number(birthMinute), calendarType === "lunar", gender);
+    const dominant = saju.fiveElements.labels[saju.fiveElements.dominantElement];
+    const weak = saju.fiveElements.labels[saju.fiveElements.weakestElement];
+    const tomorrowFocus = dominant === "화" || dominant === "목" ? "행동" : "정리";
+    const report = [
+      "내일의 운세 핵심",
+      name + "님의 내일 키워드는 '" + tomorrowFocus + "' 입니다.",
+      "강한 기운은 " + dominant + ", 보완 기운은 " + weak + "이므로 과한 확장보다 우선순위 1~2개에 집중하는 편이 유리합니다.",
+      "",
+      "간단 실천 가이드",
+      "1) 오전: 가장 중요한 결정 1건 처리",
+      "2) 오후: 대화/연락에서 오해 소지 문장 줄이기",
+      "3) 저녁: 다음 날 일정 3줄 정리",
+    ].join("\n");
+    return res.json({ title: "내일의 운세", profile: { name, gender, calendarType }, summary: "내일은 " + tomorrowFocus + " 중심 운영이 좋습니다.", saju, report });
+  } catch (error) {
+    return res.status(500).json({ message: "내일의 운세 분석 중 오류가 발생했습니다.", detail: error.message });
+  }
+});
+
+app.post("/api/premium-zodiac", (req, res) => {
+  try {
+    const { name, birthDate } = req.body || {};
+    if (!name || !birthDate) return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
+    const ZODIAC = ["쥐", "소", "호랑이", "토끼", "용", "뱀", "말", "양", "원숭이", "닭", "개", "돼지"];
+    const [year] = birthDate.split("-").map(Number);
+    const zodiac = ZODIAC[((year - 4) % 12 + 12) % 12];
+    const moodMap = { 쥐: "기획운 상승", 소: "안정운 상승", 호랑이: "도전운 상승", 토끼: "관계운 상승", 용: "성과운 상승", 뱀: "집중운 상승", 말: "행동운 상승", 양: "회복운 상승", 원숭이: "아이디어운 상승", 닭: "정리운 상승", 개: "신뢰운 상승", 돼지: "재충전운 상승" };
+    const summary = zodiac + "띠 오늘의 포인트: " + (moodMap[zodiac] || "균형운");
+    const report = [zodiac + "띠 운세", name + "님은 " + zodiac + "띠 흐름에서 오늘 " + (moodMap[zodiac] || "균형운") + "이 강합니다.", "사람을 대할 때는 속도보다 신뢰를 먼저 쌓고, 금전/일정은 보수적으로 점검하면 안정감이 커집니다.", "짧은 조언: 중요한 선택 전 10분만 멈춰 체크리스트를 확인하세요."].join("\n");
+    return res.json({ title: "띠 운세", zodiac, summary, report });
+  } catch (error) {
+    return res.status(500).json({ message: "띠 운세 분석 중 오류가 발생했습니다.", detail: error.message });
+  }
+});
+
+app.post("/api/premium-star-sign", (req, res) => {
+  try {
+    const { name, birthDate } = req.body || {};
+    if (!name || !birthDate) return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
+    const ranges = [
+      { sign: "염소자리", start: 1222, end: 119 }, { sign: "물병자리", start: 120, end: 218 }, { sign: "물고기자리", start: 219, end: 320 }, { sign: "양자리", start: 321, end: 419 },
+      { sign: "황소자리", start: 420, end: 520 }, { sign: "쌍둥이자리", start: 521, end: 621 }, { sign: "게자리", start: 622, end: 722 }, { sign: "사자자리", start: 723, end: 822 },
+      { sign: "처녀자리", start: 823, end: 922 }, { sign: "천칭자리", start: 923, end: 1022 }, { sign: "전갈자리", start: 1023, end: 1121 }, { sign: "사수자리", start: 1122, end: 1221 },
+    ];
+    const [, month, day] = birthDate.split("-").map(Number);
+    const value = month * 100 + day;
+    const found = ranges.find((r) => (r.start <= r.end ? value >= r.start && value <= r.end : value >= r.start || value <= r.end));
+    const starSign = found ? found.sign : "별자리";
+    const summary = starSign + " 오늘의 포인트: 감정 표현은 부드럽게, 선택은 명확하게.";
+    const report = ["별자리 운세", name + "님의 별자리는 " + starSign + " 입니다.", "오늘은 관계와 일 모두에서 말의 톤이 결과를 좌우합니다. 부드럽게 시작하고 핵심은 짧게 전달하세요.", "짧은 조언: 우선순위 1개만 확실히 끝내면 나머지는 자연스럽게 풀립니다."].join("\n");
+    return res.json({ title: "별자리 운세", starSign, summary, report });
+  } catch (error) {
+    return res.status(500).json({ message: "별자리 운세 분석 중 오류가 발생했습니다.", detail: error.message });
   }
 });
 

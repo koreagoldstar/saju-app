@@ -174,13 +174,49 @@
             <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
           </div>
         </button>
+        <button type="button" data-href="/tomorrow-fortune" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="/assets/images/icon-tomorrow-fortune.svg" alt="내일의 운세 아이콘" class="content-thumb" />
+              <div>
+              <p class="text-base font-semibold text-stone-100">내일의 운세</p>
+              <p class="mt-2 text-sm text-stone-300/85">내일 하루의 핵심 포인트와 간단 실천 가이드를 제공합니다.</p>
+              </div>
+            </div>
+            <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
+          </div>
+        </button>
+        <button type="button" data-href="/zodiac-fortune" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="/assets/images/icon-zodiac-fortune.svg" alt="띠 운세 아이콘" class="content-thumb" />
+              <div>
+              <p class="text-base font-semibold text-stone-100">띠 운세</p>
+              <p class="mt-2 text-sm text-stone-300/85">띠 기준 흐름과 관계/실행 포인트를 간단명료하게 안내합니다.</p>
+              </div>
+            </div>
+            <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
+          </div>
+        </button>
+        <button type="button" data-href="/star-sign-fortune" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <img src="/assets/images/icon-star-sign-fortune.svg" alt="별자리 운세 아이콘" class="content-thumb" />
+              <div>
+              <p class="text-base font-semibold text-stone-100">별자리 운세</p>
+              <p class="mt-2 text-sm text-stone-300/85">별자리 기반의 감정/관계 포인트를 짧고 선명하게 보여줍니다.</p>
+              </div>
+            </div>
+            <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
+          </div>
+        </button>
       </div>
     </section>
 
     <section id="saju-form-section" class="mt-7 grid gap-6 lg:grid-cols-2">
       <div class="dashboard-card rounded-3xl p-5 md:p-6">
-        <h3 class="text-lg font-semibold text-stone-100">당일 통합 포춘 운세</h3>
-        <p class="mt-1 text-xs text-stone-400">오늘의 전반 운세를 통합 리포트로 확인합니다.</p>
+        <h3 class="text-lg font-semibold text-stone-100">오늘의 운세</h3>
+        <p class="mt-1 text-xs text-stone-400">핵심만 간단하게 확인합니다.</p>
         <form id="saju-form" class="mt-4 space-y-4">
           <input name="name" required placeholder="이름" class="w-full rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-amber-200/80" />
           <input type="date" name="birthDate" required class="w-full rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none focus:border-amber-200/80" />
@@ -196,12 +232,7 @@
               <option value="solar">양력</option><option value="lunar">음력</option>
             </select>
           </div>
-          <select name="tone" class="w-full rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none focus:border-amber-200/80">
-            <option value="expert">문체: 전문가형</option>
-            <option value="comfort">문체: 상담형</option>
-          </select>
-
-          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-3 font-semibold text-stone-900 hover:from-amber-400 hover:to-yellow-200">당일 포춘 운세 보기</button>
+          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-3 font-semibold text-stone-900 hover:from-amber-400 hover:to-yellow-200">오늘의 운세 보기</button>
         </form>
       </div>
 
@@ -211,45 +242,9 @@
           <p id="empty-message" class="text-sm text-stone-300/80">정보를 입력하면 맞춤 운세 결과가 표시됩니다.</p>
 
           <div id="result-content" class="hidden space-y-3">
-            <p id="category-line" class="text-sm font-semibold gold-text">당일 통합 포춘 운세</p>
+            <p id="category-line" class="text-sm font-semibold gold-text">오늘의 운세</p>
             <p id="profile-line" class="text-sm text-stone-300/90"></p>
             <p id="calendar-line" class="text-sm text-stone-300/90"></p>
-            <p id="tone-line" class="text-sm text-stone-300/90"></p>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3"><p class="text-xs text-stone-400">연주</p><p id="year-pillar" class="text-xl font-bold text-stone-100"></p></div>
-              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3"><p class="text-xs text-stone-400">월주</p><p id="month-pillar" class="text-xl font-bold text-stone-100"></p></div>
-              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3"><p class="text-xs text-stone-400">일주</p><p id="day-pillar" class="text-xl font-bold text-stone-100"></p></div>
-              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3"><p class="text-xs text-stone-400">시주</p><p id="time-pillar" class="text-xl font-bold text-stone-100"></p></div>
-            </div>
-            <div class="rounded-xl border border-amber-200/20 bg-black/35 p-4">
-              <p class="text-xs text-stone-400">만세력 사주팔자 (천간/지지)</p>
-              <div id="palja-grid" class="mt-3 grid grid-cols-4 gap-2"></div>
-            </div>
-            <div class="rounded-xl border border-amber-200/20 bg-black/35 p-4"><p class="text-xs text-stone-400">사주 8자</p><p id="eight-char" class="mt-1 text-lg font-semibold text-stone-100"></p></div>
-            <div class="rounded-xl border border-amber-200/20 bg-black/35 p-4">
-              <p class="text-xs text-stone-400">오행 하이라이트</p>
-              <div class="mt-2 flex flex-wrap gap-2">
-                <span id="dominant-element-chip" class="element-chip element-chip-strong">강한 오행: -</span>
-                <span id="weak-element-chip" class="element-chip element-chip-weak">보완 오행: -</span>
-              </div>
-            </div>
-            <div class="rounded-xl border border-amber-200/20 bg-black/35 p-4">
-              <p class="text-xs text-stone-400">오행 분포 차트</p>
-              <div class="mt-3 grid gap-3 md:grid-cols-2">
-                <div class="rounded-lg bg-black/35 p-3"><canvas id="five-element-radar" height="180"></canvas></div>
-                <div class="rounded-lg bg-black/35 p-3"><canvas id="five-element-bar" height="180"></canvas></div>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3">
-                <p class="text-xs text-stone-400">현재 대운</p>
-                <p id="current-daeyun" class="mt-1 text-sm font-semibold text-stone-100"></p>
-              </div>
-              <div class="rounded-xl border border-amber-200/20 bg-black/35 p-3">
-                <p class="text-xs text-stone-400">현재 세운</p>
-                <p id="current-sewoon" class="mt-1 text-sm font-semibold text-stone-100"></p>
-              </div>
-            </div>
             <div class="rounded-xl border border-amber-300/25 bg-amber-300/10 p-4"><p class="text-xs gold-text">해석</p><p id="ai-fortune" class="mt-2 whitespace-pre-line leading-7 text-stone-200"></p></div>
           </div>
         </div>
@@ -280,26 +275,6 @@
     const emptyMessage = document.getElementById("empty-message");
     const resultContent = document.getElementById("result-content");
     const submitBtn = document.getElementById("submit-btn");
-    const paljaGrid = document.getElementById("palja-grid");
-    const dominantElementChip = document.getElementById("dominant-element-chip");
-    const weakElementChip = document.getElementById("weak-element-chip");
-    let fiveElementRadarChart = null;
-    let fiveElementBarChart = null;
-
-    const elementLabelMap = {
-      wood: "목",
-      fire: "화",
-      earth: "토",
-      metal: "금",
-      water: "수",
-    };
-    const elementColorMap = {
-      wood: "#57d17f",
-      fire: "#ff7a66",
-      earth: "#f2c66b",
-      metal: "#d5d9e2",
-      water: "#72b6ff",
-    };
 
     premiumEntries.forEach((entry) => {
       entry.addEventListener("click", () => {
@@ -308,129 +283,6 @@
       });
     });
 
-    function renderPaljaGrid(manse) {
-      if (!manse || !paljaGrid) return;
-      const cells = [
-        { label: "년간", char: manse.year.gan, element: manse.year.ganElement },
-        { label: "년지", char: manse.year.zhi, element: manse.year.zhiElement },
-        { label: "월간", char: manse.month.gan, element: manse.month.ganElement },
-        { label: "월지", char: manse.month.zhi, element: manse.month.zhiElement },
-        { label: "일간", char: manse.day.gan, element: manse.day.ganElement },
-        { label: "일지", char: manse.day.zhi, element: manse.day.zhiElement },
-        { label: "시간", char: manse.time.gan, element: manse.time.ganElement },
-        { label: "시지", char: manse.time.zhi, element: manse.time.zhiElement },
-      ];
-      paljaGrid.innerHTML = cells
-        .map(
-          (cell) =>
-            '<div class="palja-cell">' +
-            '<p class="text-[11px] text-stone-400">' + cell.label + "</p>" +
-            '<p class="mt-1 text-xl font-bold element-' + cell.element + '">' + cell.char + "</p>" +
-            '<p class="mt-1 text-[11px] text-stone-400">' + (elementLabelMap[cell.element] || "-") + "</p>" +
-            "</div>"
-        )
-        .join("");
-    }
-
-    function renderFiveElementCharts(fiveElements) {
-      if (!fiveElements || !window.Chart) return;
-      const labels = ["목", "화", "토", "금", "수"];
-      const keys = ["wood", "fire", "earth", "metal", "water"];
-      const values = keys.map((k) => (fiveElements.counts && fiveElements.counts[k]) || 0);
-      const colors = keys.map((k) => elementColorMap[k]);
-
-      const radarCanvas = document.getElementById("five-element-radar");
-      const barCanvas = document.getElementById("five-element-bar");
-      if (!radarCanvas || !barCanvas) return;
-
-      if (fiveElementRadarChart) fiveElementRadarChart.destroy();
-      if (fiveElementBarChart) fiveElementBarChart.destroy();
-
-      fiveElementRadarChart = new Chart(radarCanvas, {
-        type: "radar",
-        data: {
-          labels,
-          datasets: [
-            {
-              label: "오행 점수",
-              data: values,
-              borderColor: "#d7b26d",
-              backgroundColor: "rgba(215, 178, 109, 0.22)",
-              pointBackgroundColor: "#f5db9e",
-              pointBorderColor: "#f5db9e",
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: "#d6d3d1" } } },
-          scales: {
-            r: {
-              min: 0,
-              max: 5,
-              ticks: { stepSize: 1, color: "#a8a29e", backdropColor: "transparent" },
-              grid: { color: "rgba(214, 211, 209, 0.25)" },
-              angleLines: { color: "rgba(214, 211, 209, 0.22)" },
-              pointLabels: { color: "#e7e5e4" },
-            },
-          },
-        },
-      });
-
-      fiveElementBarChart = new Chart(barCanvas, {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            {
-              label: "오행 개수",
-              data: values,
-              backgroundColor: colors,
-              borderColor: colors,
-              borderWidth: 1,
-              borderRadius: 6,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: "#d6d3d1" } } },
-          scales: {
-            y: {
-              beginAtZero: true,
-              suggestedMax: 5,
-              ticks: { stepSize: 1, color: "#a8a29e" },
-              grid: { color: "rgba(214, 211, 209, 0.2)" },
-            },
-            x: {
-              ticks: { color: "#e7e5e4" },
-              grid: { display: false },
-            },
-          },
-        },
-      });
-    }
-
-    function renderElementHighlights(fiveElements) {
-      if (!fiveElements) return;
-      const dominant = fiveElements.dominantElement;
-      const weak = fiveElements.weakestElement;
-      const dominantLabel = elementLabelMap[dominant] || "-";
-      const weakLabel = elementLabelMap[weak] || "-";
-      const dominantCount = fiveElements.counts && typeof fiveElements.counts[dominant] === "number" ? fiveElements.counts[dominant] : 0;
-      const weakCount = fiveElements.counts && typeof fiveElements.counts[weak] === "number" ? fiveElements.counts[weak] : 0;
-
-      if (dominantElementChip) {
-        dominantElementChip.textContent = "강한 오행: " + dominantLabel + " (" + dominantCount + ")";
-        dominantElementChip.className = "element-chip element-chip-strong element-" + dominant;
-      }
-      if (weakElementChip) {
-        weakElementChip.textContent = "보완 오행: " + weakLabel + " (" + weakCount + ")";
-        weakElementChip.className = "element-chip element-chip-weak element-" + weak;
-      }
-    }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -442,7 +294,6 @@
         birthMinute: Number(f.get("birthMinute")),
         gender: f.get("gender"),
         calendarType: f.get("calendarType"),
-        tone: f.get("tone"),
         category: "love",
       };
 
@@ -462,27 +313,11 @@
         emptyMessage.classList.add("hidden");
         resultContent.classList.remove("hidden");
 
-        document.getElementById("category-line").textContent = "당일 통합 포춘 운세";
+        document.getElementById("category-line").textContent = "오늘의 운세";
         document.getElementById("profile-line").textContent = data.profile.name + " / " + (data.profile.gender === "male" ? "남성" : "여성");
         document.getElementById("calendar-line").textContent = "달력: " + (data.profile.calendarType === "solar" ? "양력" : "음력") + " | 양력 기준: " + data.saju.solarDateTime;
-        document.getElementById("tone-line").textContent = "해석 문체: " + (data.toneLabel || "전문가형");
-        document.getElementById("year-pillar").textContent = data.saju.yearPillar;
-        document.getElementById("month-pillar").textContent = data.saju.monthPillar;
-        document.getElementById("day-pillar").textContent = data.saju.dayPillar;
-        document.getElementById("time-pillar").textContent = data.saju.timePillar;
-        document.getElementById("eight-char").textContent = data.saju.eightChar;
-        renderPaljaGrid(data.saju.manse);
-        renderElementHighlights(data.saju.fiveElements);
-        renderFiveElementCharts(data.saju.fiveElements);
-        const currentDaYun = data.saju.luckCycle && data.saju.luckCycle.currentDaYun;
-        const currentSeWoon = data.saju.luckCycle && data.saju.luckCycle.currentSeWoon;
-        document.getElementById("current-daeyun").textContent = currentDaYun
-          ? currentDaYun.ganZhi + " (" + currentDaYun.startYear + "~" + currentDaYun.endYear + ")"
-          : "계산 정보 없음";
-        document.getElementById("current-sewoon").textContent = currentSeWoon
-          ? currentSeWoon.ganZhi + " / " + currentSeWoon.year + "년"
-          : "계산 정보 없음";
-        document.getElementById("ai-fortune").textContent = data.aiFortune;
+        const concise = String(data.aiFortune || "").split("\n").filter(Boolean).slice(0, 2).join(" ");
+        document.getElementById("ai-fortune").textContent = concise || "오늘은 중요한 한 가지에 집중하면 흐름이 안정됩니다.";
       } catch (err) {
         alert(err.message);
       } finally {
