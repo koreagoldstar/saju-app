@@ -37,6 +37,7 @@
       <div class="rounded-2xl border border-amber-300/30 bg-slate-900/70 p-4">
         <p class="text-sm font-semibold text-amber-200">결과물</p>
         <p id="summary" class="mt-3 rounded-lg bg-black/30 p-3 text-sm text-stone-200">입력 후 내일의 운세가 표시됩니다.</p>
+        <div id="quick-cards" class="mt-3 grid gap-2 md:grid-cols-3"></div>
         <pre id="result" class="mt-3 max-h-[320px] overflow-auto rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap"></pre>
       </div>
     </section>
@@ -44,6 +45,7 @@
   <script>
     const form = document.getElementById("form");
     const summary = document.getElementById("summary");
+    const quickCards = document.getElementById("quick-cards");
     const result = document.getElementById("result");
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -60,6 +62,12 @@
       const data = await res.json();
       if (!res.ok) return alert(data.message || "요청 실패");
       summary.textContent = data.summary;
+      quickCards.innerHTML = (data.quickCards || []).map((x) =>
+        '<div class="rounded-lg border border-amber-200/25 bg-black/30 p-3">' +
+        '<p class="text-[11px] text-amber-200">' + x.title + '</p>' +
+        '<p class="mt-1 text-xs leading-5 text-stone-200">' + x.text + '</p>' +
+        '</div>'
+      ).join("");
       result.textContent = data.report;
     });
   </script>

@@ -35,6 +35,20 @@ module.exports = async function handler(req, res) {
     const starSign = getStarSign(month, day);
 
     const summary = starSign + " 오늘의 포인트: 감정 표현은 부드럽게, 선택은 명확하게.";
+    const quickCards = [
+      {
+        title: "관계",
+        text: "문장을 짧게 나누어 말하면 전달력이 좋아지고, 상대의 방어감이 낮아져 대화가 편해집니다.",
+      },
+      {
+        title: "재물",
+        text: "새로운 소비보다 기존 계획을 유지하는 편이 유리합니다. 작은 절약이 오늘은 크게 작동합니다.",
+      },
+      {
+        title: "건강",
+        text: "과한 카페인보다 수분 보충과 짧은 스트레칭이 집중력 회복에 더 효과적입니다.",
+      },
+    ];
     const report = [
       "별자리 운세",
       name + "님의 별자리는 " + starSign + " 입니다.",
@@ -42,7 +56,7 @@ module.exports = async function handler(req, res) {
       "짧은 조언: 우선순위 1개만 확실히 끝내면 나머지는 자연스럽게 풀립니다.",
     ].join("\n");
 
-    return res.status(200).json({ title: "별자리 운세", starSign, summary, report });
+    return res.status(200).json({ title: "별자리 운세", starSign, summary, quickCards, report });
   } catch (error) {
     return res.status(500).json({ message: "별자리 운세 분석 중 오류가 발생했습니다.", detail: error.message });
   }

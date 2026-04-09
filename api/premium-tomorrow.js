@@ -16,6 +16,22 @@ module.exports = async function handler(req, res) {
     const dominant = saju.fiveElements.labels[saju.fiveElements.dominantElement];
     const weak = saju.fiveElements.labels[saju.fiveElements.weakestElement];
     const tomorrowFocus = dominant === "화" || dominant === "목" ? "행동" : "정리";
+    const quickCards = [
+      {
+        title: "관계",
+        text: tomorrowFocus === "행동"
+          ? "대화는 먼저 공감 한마디를 건네고, 핵심 요청은 짧게 전달하면 분위기가 부드럽게 풀립니다."
+          : "서두르지 말고 상대의 말 맥락을 끝까지 듣는 태도가 신뢰를 크게 높입니다.",
+      },
+      {
+        title: "재물",
+        text: "충동 지출보다 필요한 항목 1~2개만 우선 처리하면 금전 흐름이 안정적으로 유지됩니다.",
+      },
+      {
+        title: "건강",
+        text: "과로 신호가 보이면 수면 시간을 30분만 늘려도 컨디션 회복 속도가 확연히 빨라집니다.",
+      },
+    ];
 
     const report = [
       "내일의 운세 핵심",
@@ -32,6 +48,7 @@ module.exports = async function handler(req, res) {
       title: "내일의 운세",
       profile: { name, gender, calendarType },
       summary: "내일은 " + tomorrowFocus + " 중심 운영이 좋습니다.",
+      quickCards,
       saju,
       report,
     });
