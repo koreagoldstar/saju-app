@@ -162,6 +162,11 @@ app.post("/api/premium-tojeong", (req, res) => {
       profile: { name, gender, calendarType },
       saju,
       summary: "2026년 핵심 전략: 상반기 구조 정비, 하반기 선택적 확장",
+      luckTips: [
+        "아침 10분 일정 정리로 하루 우선순위를 먼저 고정하세요.",
+        "중요 계약/결제는 당일 확정 대신 하루 유예 후 재검토하세요.",
+        "주 1회 지출 점검으로 불필요한 누수부터 줄이세요.",
+      ],
       report,
     });
   } catch (error) {
@@ -190,6 +195,11 @@ app.post("/api/premium-daewoon", (req, res) => {
       saju,
       daYunTimeline: top10,
       summary: strategy,
+      luckTips: [
+        "현재 대운 핵심 키워드 1개를 정해 90일 단위로 실행하세요.",
+        "대운 전환 1~2년 전에는 보수적 결정을 우선해 변동성을 줄이세요.",
+        "월 1회 기록으로 '잘된 선택/아쉬운 선택'을 구분해 패턴을 고정하세요.",
+      ],
       report: "10년 대운 타임라인\n" + report + "\n\n운영 조언\n" + strategy,
     });
   } catch (error) {
@@ -245,7 +255,17 @@ app.post("/api/premium-lifetime", (req, res) => {
       "권장 루틴: 1) 현재 대운 위치 확인 2) 다음 전환까지 남은 기간 점검 3) 관계/재무/건강 우선순위 재설정 4) 90일 실행 계획 업데이트.",
       "이 과정을 반복하면 운세는 막연한 예측이 아니라, 삶의 의사결정 품질을 개선하는 실전 도구로 작동합니다.",
     ].join("\n");
-    return res.json({ title: "평생 사주 분석", profile: { name, gender, calendarType }, saju, report });
+    return res.json({
+      title: "평생 사주 분석",
+      profile: { name, gender, calendarType },
+      saju,
+      luckTips: [
+        "분기 1회 핵심 관계/재무/건강 우선순위를 다시 정리하세요.",
+        "대운 전환 전후 6개월은 큰 결정 속도를 의도적으로 늦추세요.",
+        "하루 10분 기록으로 감정-선택-결과 연결을 점검하세요.",
+      ],
+      report,
+    });
   } catch (error) {
     return res.status(500).json({ message: "평생 사주 분석 중 오류가 발생했습니다.", detail: error.message });
   }

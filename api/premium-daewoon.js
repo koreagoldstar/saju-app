@@ -30,6 +30,11 @@ module.exports = async function handler(req, res) {
       saju,
       daYunTimeline: top10,
       summary: strategy,
+      luckTips: [
+        "현재 대운 핵심 키워드 1개를 정해 90일 단위로 실행하세요.",
+        "대운 전환 1~2년 전에는 보수적 결정을 우선해 변동성을 줄이세요.",
+        "월 1회 기록으로 '잘된 선택/아쉬운 선택'을 구분해 패턴을 고정하세요.",
+      ],
       report: "10년 대운 타임라인\n" + report + "\n\n운영 조언\n" + strategy,
     });
   } catch (error) {

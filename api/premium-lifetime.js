@@ -59,6 +59,11 @@ module.exports = async function handler(req, res) {
       title: "평생 사주 분석",
       profile: { name, gender, calendarType },
       saju,
+      luckTips: [
+        "분기 1회 핵심 관계/재무/건강 우선순위를 다시 정리하세요.",
+        "대운 전환 전후 6개월은 큰 결정 속도를 의도적으로 늦추세요.",
+        "하루 10분 기록으로 감정-선택-결과 연결을 점검하세요.",
+      ],
       report,
     });
   } catch (error) {

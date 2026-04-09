@@ -40,6 +40,11 @@ module.exports = async function handler(req, res) {
       profile: { name, gender, calendarType },
       saju,
       summary: "2026년 핵심 전략: 상반기 구조 정비, 하반기 선택적 확장",
+      luckTips: [
+        "아침 10분 일정 정리로 하루 우선순위를 먼저 고정하세요.",
+        "중요 계약/결제는 당일 확정 대신 하루 유예 후 재검토하세요.",
+        "주 1회 지출 점검으로 불필요한 누수부터 줄이세요.",
+      ],
       report,
     });
   } catch (error) {
