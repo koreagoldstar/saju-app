@@ -171,11 +171,9 @@
         birthHour: Number(f.get("birthHour")),
         birthMinute: Number(f.get("birthMinute")),
         gender: f.get("gender"),
-        calendarType: f.get("calendarType"),
-        category: "career",
-        tone: "expert"
+        calendarType: f.get("calendarType")
       };
-      const res = await fetch("/api/saju", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const res = await fetch("/api/premium-lifetime", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const data = await res.json();
       if (!res.ok) return alert(data.message || "요청 실패");
       year.textContent = data.saju.yearPillar;
@@ -205,14 +203,7 @@
           "</div>";
         })
         .join("");
-      const longTermHeader = [
-        "평생 사주 장기 관점 안내",
-        "이 리포트는 현재 시점의 고정 해석이 아니라, 대운·세운·생활 환경 변화에 따라 재해석되어야 합니다.",
-        "직업, 관계, 재무, 건강의 우선순위는 시기마다 달라지므로 최소 분기 1회 재확인을 권장합니다.",
-        "특히 전환기(이직, 결혼, 투자, 이사, 사업 확장)에는 반드시 최신 흐름으로 업데이트해 보세요.",
-        ""
-      ].join("\n");
-      result.textContent = longTermHeader + data.aiFortune;
+      result.textContent = data.report;
     });
   </script>
 </body>
