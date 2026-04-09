@@ -159,7 +159,11 @@
           <select name="gender" class="rounded-lg bg-slate-800 px-3 py-2"><option value="male">남성</option><option value="female">여성</option></select>
           <select name="calendarType" class="rounded-lg bg-slate-800 px-3 py-2"><option value="solar">양력</option><option value="lunar">음력</option></select>
         </div>
-        <textarea name="recentIssue" rows="3" placeholder="최근 이슈 사항 (예: 이직 고민, 관계 갈등, 투자 결정 등)" class="w-full rounded-lg bg-slate-800 px-3 py-2"></textarea>
+        <div class="rounded-lg border border-amber-300/20 bg-slate-950/40 p-3">
+          <p class="text-[11px] text-amber-200">최근 이슈 사항</p>
+          <p class="mt-1 text-[11px] text-stone-400">최근 3개월내 특이사항을 적으세요.</p>
+          <textarea name="recentIssue" rows="3" placeholder="예: 이직 고민, 관계 갈등, 투자 결정 등" class="mt-2 w-full rounded-lg bg-slate-800 px-3 py-2"></textarea>
+        </div>
         <button class="w-full rounded-lg bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-2 font-semibold text-slate-900">평생 사주 리포트 생성</button>
       </form>
 
