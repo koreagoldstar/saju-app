@@ -33,22 +33,6 @@
       background: rgba(220, 184, 115, 0.16);
       color: #f5db9e;
     }
-    .category-tab {
-      border: 1px solid rgba(207, 168, 98, 0.35);
-      background: rgba(15, 16, 21, 0.78);
-      color: #d9d2c3;
-      transition: all 0.2s ease;
-    }
-    .category-tab:hover {
-      border-color: rgba(232, 198, 132, 0.8);
-      transform: translateY(-1px);
-    }
-    .category-tab.active {
-      background: linear-gradient(135deg, #7e6235, #d1a251);
-      color: #17120b;
-      border-color: rgba(226, 196, 134, 0.95);
-      box-shadow: 0 8px 22px rgba(158, 121, 59, 0.35);
-    }
     .premium-tile {
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
@@ -147,7 +131,7 @@
         <p class="text-xs text-stone-400">선택 시 상세 입력 혹은 결제 안내로 이동</p>
       </div>
       <div class="grid gap-4 md:grid-cols-2">
-        <button type="button" data-target="#saju-form-section" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+        <button type="button" data-href="/lifetime-saju" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-start gap-3">
               <img src="/assets/images/icon-lifetime-saju.png" alt="평생 사주 아이콘" class="content-thumb" />
@@ -159,7 +143,7 @@
             <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
           </div>
         </button>
-        <button type="button" data-target="#payment-guide" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+        <button type="button" data-href="/sintojeong-2026" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-start gap-3">
               <img src="/assets/images/icon-2026-sintojeong.png" alt="2026 신토정비결 아이콘" class="content-thumb" />
@@ -171,7 +155,7 @@
             <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
           </div>
         </button>
-        <button type="button" data-target="#payment-guide" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+        <button type="button" data-href="/premium-compatibility" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-start gap-3">
               <img src="/assets/images/icon-premium-compatibility.png" alt="프리미엄 궁합 아이콘" class="content-thumb" />
@@ -183,7 +167,7 @@
             <span class="premium-badge rounded-full px-2.5 py-1 text-[11px] font-bold">Premium</span>
           </div>
         </button>
-        <button type="button" data-target="#saju-form-section" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
+        <button type="button" data-href="/daewoon-10year" class="premium-entry premium-tile dashboard-card rounded-2xl p-5 text-left">
           <div class="flex items-start justify-between gap-3">
             <div class="flex items-start gap-3">
               <img src="/assets/images/icon-10year-daewoon.png" alt="10년 대운 분석 아이콘" class="content-thumb" />
@@ -200,8 +184,8 @@
 
     <section id="saju-form-section" class="mt-7 grid gap-6 lg:grid-cols-2">
       <div class="dashboard-card rounded-3xl p-5 md:p-6">
-        <h3 class="text-lg font-semibold text-stone-100">상세 입력 폼</h3>
-        <p class="mt-1 text-xs text-stone-400">콘텐츠별 맞춤 해석을 위해 기본 정보를 입력해 주세요.</p>
+        <h3 class="text-lg font-semibold text-stone-100">당일 통합 포춘 운세</h3>
+        <p class="mt-1 text-xs text-stone-400">오늘의 전반 운세를 통합 리포트로 확인합니다.</p>
         <form id="saju-form" class="mt-4 space-y-4">
           <input name="name" required placeholder="이름" class="w-full rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none placeholder:text-stone-500 focus:border-amber-200/80" />
           <input type="date" name="birthDate" required class="w-full rounded-xl border border-amber-200/30 bg-black/35 px-4 py-3 text-stone-100 outline-none focus:border-amber-200/80" />
@@ -222,15 +206,7 @@
             <option value="comfort">문체: 상담형</option>
           </select>
 
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            <button type="button" data-category="love" class="category-tab active rounded-xl px-3 py-2 text-sm font-semibold">연애운</button>
-            <button type="button" data-category="business" class="category-tab rounded-xl px-3 py-2 text-sm font-semibold">사업운</button>
-            <button type="button" data-category="benefactor" class="category-tab rounded-xl px-3 py-2 text-sm font-semibold">귀인운</button>
-            <button type="button" data-category="career" class="category-tab rounded-xl px-3 py-2 text-sm font-semibold">직장운</button>
-            <button type="button" data-category="wealth" class="category-tab rounded-xl px-3 py-2 text-sm font-semibold">재물운</button>
-          </div>
-
-          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-3 font-semibold text-stone-900 hover:from-amber-400 hover:to-yellow-200">상세 운세 분석 시작</button>
+          <button id="submit-btn" type="submit" class="w-full rounded-xl bg-gradient-to-r from-amber-500 to-yellow-300 px-4 py-3 font-semibold text-stone-900 hover:from-amber-400 hover:to-yellow-200">당일 포춘 운세 보기</button>
         </form>
       </div>
 
@@ -240,7 +216,7 @@
           <p id="empty-message" class="text-sm text-stone-300/80">정보를 입력하면 맞춤 운세 결과가 표시됩니다.</p>
 
           <div id="result-content" class="hidden space-y-3">
-            <p id="category-line" class="text-sm font-semibold gold-text"></p>
+            <p id="category-line" class="text-sm font-semibold gold-text">당일 통합 포춘 운세</p>
             <p id="profile-line" class="text-sm text-stone-300/90"></p>
             <p id="calendar-line" class="text-sm text-stone-300/90"></p>
             <p id="tone-line" class="text-sm text-stone-300/90"></p>
@@ -304,7 +280,6 @@
 
   <script>
     const form = document.getElementById("saju-form");
-    const tabs = Array.from(document.querySelectorAll(".category-tab"));
     const premiumEntries = Array.from(document.querySelectorAll(".premium-entry"));
     const loading = document.getElementById("loading");
     const emptyMessage = document.getElementById("empty-message");
@@ -315,7 +290,6 @@
     const weakElementChip = document.getElementById("weak-element-chip");
     let fiveElementRadarChart = null;
     let fiveElementBarChart = null;
-    let selectedCategory = "love";
 
     const elementLabelMap = {
       wood: "목",
@@ -332,20 +306,10 @@
       water: "#72b6ff",
     };
 
-    function setTab(category) {
-      selectedCategory = category;
-      tabs.forEach((tab) => {
-        tab.classList.toggle("active", tab.dataset.category === category);
-      });
-    }
-
-    tabs.forEach((tab) => tab.addEventListener("click", () => setTab(tab.dataset.category)));
     premiumEntries.forEach((entry) => {
       entry.addEventListener("click", () => {
-        const targetSelector = entry.dataset.target;
-        if (!targetSelector) return;
-        const target = document.querySelector(targetSelector);
-        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        const href = entry.dataset.href;
+        if (href) window.location.href = href;
       });
     });
 
@@ -484,7 +448,7 @@
         gender: f.get("gender"),
         calendarType: f.get("calendarType"),
         tone: f.get("tone"),
-        category: selectedCategory,
+        category: "love",
       };
 
       try {
@@ -503,7 +467,7 @@
         emptyMessage.classList.add("hidden");
         resultContent.classList.remove("hidden");
 
-        document.getElementById("category-line").textContent = "선택 카테고리: " + data.categoryLabel;
+        document.getElementById("category-line").textContent = "당일 통합 포춘 운세";
         document.getElementById("profile-line").textContent = data.profile.name + " / " + (data.profile.gender === "male" ? "남성" : "여성");
         document.getElementById("calendar-line").textContent = "달력: " + (data.profile.calendarType === "solar" ? "양력" : "음력") + " | 양력 기준: " + data.saju.solarDateTime;
         document.getElementById("tone-line").textContent = "해석 문체: " + (data.toneLabel || "전문가형");

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>프리미엄 궁합</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <main class="mx-auto max-w-5xl px-4 py-8">
+    <a href="/" class="text-sm text-amber-300 underline">메인으로</a>
+    <h1 class="mt-2 text-2xl font-bold">프리미엄 궁합 분석</h1>
+    <p class="mt-1 text-sm text-slate-300">두 사람의 사주 오행 편차와 충돌 가능성을 분석합니다.</p>
+    <form id="form" class="mt-4 grid gap-3 md:grid-cols-4">
+      <input name="meName" required placeholder="내 이름" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <input type="date" name="meBirthDate" required class="rounded-lg bg-slate-800 px-3 py-2" />
+      <input type="number" name="meHour" min="0" max="23" required placeholder="내 시" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <input type="number" name="meMinute" min="0" max="59" required placeholder="내 분" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <select name="meGender" class="rounded-lg bg-slate-800 px-3 py-2"><option value="male">내 성별 남성</option><option value="female">내 성별 여성</option></select>
+      <select name="meCalendarType" class="rounded-lg bg-slate-800 px-3 py-2"><option value="solar">내 달력 양력</option><option value="lunar">내 달력 음력</option></select>
+      <input name="partnerName" required placeholder="상대 이름" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <input type="date" name="partnerBirthDate" required class="rounded-lg bg-slate-800 px-3 py-2" />
+      <input type="number" name="partnerHour" min="0" max="23" required placeholder="상대 시" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <input type="number" name="partnerMinute" min="0" max="59" required placeholder="상대 분" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <select name="partnerGender" class="rounded-lg bg-slate-800 px-3 py-2"><option value="male">상대 성별 남성</option><option value="female">상대 성별 여성</option></select>
+      <select name="partnerCalendarType" class="rounded-lg bg-slate-800 px-3 py-2"><option value="solar">상대 달력 양력</option><option value="lunar">상대 달력 음력</option></select>
+      <button class="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-slate-900 md:col-span-2">프리미엄 궁합 보기</button>
+    </form>
+    <pre id="result" class="mt-4 rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap"></pre>
+  </main>
+  <script>
+    const form = document.getElementById("form");
+    const result = document.getElementById("result");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      const [meYear, meMonth, meDay] = String(f.get("meBirthDate")).split("-").map(Number);
+      const [partnerYear, partnerMonth, partnerDay] = String(f.get("partnerBirthDate")).split("-").map(Number);
+      const payload = {
+        meName: f.get("meName"), meYear, meMonth, meDay,
+        meHour: Number(f.get("meHour")), meMinute: Number(f.get("meMinute")),
+        meGender: f.get("meGender"), meCalendarType: f.get("meCalendarType"),
+        partnerName: f.get("partnerName"), partnerYear, partnerMonth, partnerDay,
+        partnerHour: Number(f.get("partnerHour")), partnerMinute: Number(f.get("partnerMinute")),
+        partnerGender: f.get("partnerGender"), partnerCalendarType: f.get("partnerCalendarType")
+      };
+      const res = await fetch("/api/compatibility", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (!res.ok) return alert(data.message || "요청 실패");
+      result.textContent = "궁합 점수: " + data.score + "\n" + data.summary + "\n\n오행 편차:\n" + JSON.stringify(data.elementDiff, null, 2);
+    });
+  </script>
+</body>
+</html>

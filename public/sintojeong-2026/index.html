@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 신토정비결</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <main class="mx-auto max-w-4xl px-4 py-8">
+    <a href="/" class="text-sm text-amber-300 underline">메인으로</a>
+    <h1 class="mt-2 text-2xl font-bold">2026 신토정비결</h1>
+    <p class="mt-1 text-sm text-slate-300">2026년 연간 흐름과 실천 전략을 제공합니다.</p>
+    <form id="form" class="mt-4 grid gap-3 md:grid-cols-3">
+      <input name="name" required placeholder="이름" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <input type="date" name="birthDate" required class="rounded-lg bg-slate-800 px-3 py-2" />
+      <select name="gender" class="rounded-lg bg-slate-800 px-3 py-2"><option value="male">남성</option><option value="female">여성</option></select>
+      <input type="number" name="birthHour" min="0" max="23" required placeholder="시" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <input type="number" name="birthMinute" min="0" max="59" required placeholder="분" class="rounded-lg bg-slate-800 px-3 py-2" />
+      <select name="calendarType" class="rounded-lg bg-slate-800 px-3 py-2"><option value="solar">양력</option><option value="lunar">음력</option></select>
+      <button class="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-slate-900">2026 리포트 생성</button>
+    </form>
+    <pre id="result" class="mt-4 rounded-lg bg-black/30 p-3 text-xs whitespace-pre-wrap"></pre>
+  </main>
+  <script>
+    const form = document.getElementById("form");
+    const result = document.getElementById("result");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      const payload = {
+        name: f.get("name"),
+        birthDate: f.get("birthDate"),
+        birthHour: Number(f.get("birthHour")),
+        birthMinute: Number(f.get("birthMinute")),
+        gender: f.get("gender"),
+        calendarType: f.get("calendarType")
+      };
+      const res = await fetch("/api/premium-tojeong", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (!res.ok) return alert(data.message || "요청 실패");
+      result.textContent = data.report;
+    });
+  </script>
+</body>
+</html>

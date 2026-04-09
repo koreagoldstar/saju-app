@@ -5,6 +5,10 @@
     { "src": "/saju", "dest": "/public/saju/index.html" },
     { "src": "/tarot", "dest": "/public/tarot/index.html" },
     { "src": "/dream", "dest": "/public/dream/index.html" },
+    { "src": "/lifetime-saju", "dest": "/public/lifetime-saju/index.html" },
+    { "src": "/sintojeong-2026", "dest": "/public/sintojeong-2026/index.html" },
+    { "src": "/premium-compatibility", "dest": "/public/premium-compatibility/index.html" },
+    { "src": "/daewoon-10year", "dest": "/public/daewoon-10year/index.html" },
     { "src": "/(.*)", "dest": "/public/index.html" }
   ]
 }
