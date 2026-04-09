@@ -308,6 +308,17 @@
       });
     });
 
+    function buildTodayFortuneText(reportText) {
+      const sectionTitles = new Set(["성격 분석", "직업운", "주의해야 할 점"]);
+      const lines = String(reportText || "")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0 && !sectionTitles.has(line));
+      const picked = lines.slice(0, 3);
+      if (picked.length) return picked.join(" ");
+      return "오늘은 중요한 한 가지에 집중하면 흐름이 안정됩니다.";
+    }
+
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -341,8 +352,7 @@
         document.getElementById("category-line").textContent = "오늘의 운세";
         document.getElementById("profile-line").textContent = data.profile.name + " / " + (data.profile.gender === "male" ? "남성" : "여성");
         document.getElementById("calendar-line").textContent = "달력: " + (data.profile.calendarType === "solar" ? "양력" : "음력") + " | 양력 기준: " + data.saju.solarDateTime;
-        const concise = String(data.aiFortune || "").split("\n").filter(Boolean).slice(0, 2).join(" ");
-        document.getElementById("ai-fortune").textContent = concise || "오늘은 중요한 한 가지에 집중하면 흐름이 안정됩니다.";
+        document.getElementById("ai-fortune").textContent = buildTodayFortuneText(data.aiFortune);
       } catch (err) {
         alert(err.message);
       } finally {
