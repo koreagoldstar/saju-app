@@ -34,13 +34,38 @@
     }
     .reveal { opacity: 0; transform: translateY(16px); transition: all .55s ease; }
     .reveal.in { opacity: 1; transform: translateY(0); }
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 9999px;
+      border: 1px solid rgba(250, 204, 21, 0.45);
+      background: linear-gradient(135deg, rgba(120, 53, 15, 0.45), rgba(30, 41, 59, 0.55));
+      color: #fde68a;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 12px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+    }
+    .home-link .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 9999px;
+      border: 1px solid rgba(250, 204, 21, 0.55);
+      background: rgba(250, 204, 21, 0.2);
+      font-size: 12px;
+      line-height: 1;
+    }
     @keyframes twinkle { from { opacity: .35; } to { opacity: .95; } }
   </style>
 </head>
 <body class="spark min-h-screen text-slate-100">
   <div class="parallax-glow"></div>
   <main class="mx-auto max-w-5xl px-4 py-8">
-    <a href="/" class="text-sm text-amber-300 underline">메인으로</a>
+    <a href="/" class="home-link"><span class="icon">✨</span><span>메인으로</span></a>
     <section class="reveal mt-3 overflow-hidden rounded-3xl border border-amber-300/30 bg-gradient-to-br from-slate-900 to-slate-950 p-6">
       <div class="grid gap-5 md:grid-cols-[120px_1fr] md:items-center">
         <img src="/assets/images/icon-2026-sintojeong.png" alt="2026 신토정비결" class="h-28 w-28 rounded-2xl border border-amber-300/40 object-cover" />
@@ -54,7 +79,7 @@
 
     <section class="mt-6 grid gap-6 lg:grid-cols-2">
       <form id="form" class="reveal rounded-2xl border border-amber-300/30 bg-slate-900/70 p-4 space-y-3">
-        <p class="text-sm font-semibold text-amber-200">입력 폼</p>
+        <p class="text-sm font-semibold text-amber-200">정보를 넣어주세요</p>
         <input name="name" required placeholder="이름" class="w-full rounded-lg bg-slate-800 px-3 py-2" />
         <input type="date" name="birthDate" required class="w-full rounded-lg bg-slate-800 px-3 py-2" />
         <div class="grid grid-cols-2 gap-3">
