@@ -30,7 +30,7 @@ app.get("/star-sign-fortune", (req, res) => res.sendFile(path.join(__dirname, "p
 
 app.post("/api/saju", async (req, res) => {
   try {
-    const { name, birthDate, birthHour, birthMinute, gender, calendarType, category } = req.body || {};
+    const { name, birthDate, birthHour, birthMinute, gender, calendarType, category, tone } = req.body || {};
 
     if (!name || !birthDate || birthHour === undefined || birthMinute === undefined || !gender || !calendarType) {
       return res.status(400).json({ message: "필수 입력값이 누락되었습니다." });
@@ -46,7 +46,7 @@ app.post("/api/saju", async (req, res) => {
       gender,
       calendarType,
       category,
-      tone: "expert",
+      tone: tone || "expert",
       saju,
       ...saju,
     });
@@ -59,6 +59,8 @@ app.post("/api/saju", async (req, res) => {
       keywords: generated.keywords,
       aiProvider: generated.aiProvider,
       aiFortune: generated.aiFortune,
+      fortuneMode: generated.fortuneMode,
+      longformFallback: generated.longformFallback,
     });
   } catch (error) {
     return res.status(500).json({ message: "사주 계산 중 오류가 발생했습니다.", detail: error.message });

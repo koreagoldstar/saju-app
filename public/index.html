@@ -308,9 +308,15 @@
       });
     });
 
-    function buildTodayFortuneText(reportText) {
+    function buildTodayFortuneText(reportText, fortuneMode) {
+      const raw = String(reportText || "").trim();
+      if (!raw) return "오늘은 중요한 한 가지에 집중하면 흐름이 안정됩니다.";
+      if (fortuneMode === "llm") {
+        const oneLine = raw.replace(/\s+/g, " ");
+        return oneLine.length > 900 ? oneLine.slice(0, 897) + "…" : oneLine;
+      }
       const sectionTitles = new Set(["성격 분석", "직업운", "주의해야 할 점"]);
-      const lines = String(reportText || "")
+      const lines = raw
         .split("\n")
         .map((line) => line.trim())
         .filter((line) => line.length > 0 && !sectionTitles.has(line));
@@ -352,7 +358,7 @@
         document.getElementById("category-line").textContent = "오늘의 운세";
         document.getElementById("profile-line").textContent = data.profile.name + " / " + (data.profile.gender === "male" ? "남성" : "여성");
         document.getElementById("calendar-line").textContent = "달력: " + (data.profile.calendarType === "solar" ? "양력" : "음력") + " | 양력 기준: " + data.saju.solarDateTime;
-        document.getElementById("ai-fortune").textContent = buildTodayFortuneText(data.aiFortune);
+        document.getElementById("ai-fortune").textContent = buildTodayFortuneText(data.aiFortune, data.fortuneMode);
       } catch (err) {
         alert(err.message);
       } finally {
