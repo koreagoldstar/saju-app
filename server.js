@@ -61,6 +61,8 @@ app.post("/api/saju", async (req, res) => {
       aiFortune: generated.aiFortune,
       fortuneMode: generated.fortuneMode,
       longformFallback: generated.longformFallback,
+      fortuneDateKey: generated.fortuneDateKey,
+      todayDayPillar: generated.todayDayPillar,
     });
   } catch (error) {
     return res.status(500).json({ message: "사주 계산 중 오류가 발생했습니다.", detail: error.message });

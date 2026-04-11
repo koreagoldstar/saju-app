@@ -357,7 +357,14 @@
 
         document.getElementById("category-line").textContent = "오늘의 운세";
         document.getElementById("profile-line").textContent = data.profile.name + " / " + (data.profile.gender === "male" ? "남성" : "여성");
-        document.getElementById("calendar-line").textContent = "달력: " + (data.profile.calendarType === "solar" ? "양력" : "음력") + " | 양력 기준: " + data.saju.solarDateTime;
+        document.getElementById("calendar-line").textContent =
+          "달력: " +
+          (data.profile.calendarType === "solar" ? "양력" : "음력") +
+          " | 양력 기준: " +
+          data.saju.solarDateTime +
+          (data.todayDayPillar && data.fortuneDateKey
+            ? " | 오늘(" + data.fortuneDateKey + ") 일진: " + data.todayDayPillar
+            : "");
         document.getElementById("ai-fortune").textContent = buildTodayFortuneText(data.aiFortune, data.fortuneMode);
       } catch (err) {
         alert(err.message);
