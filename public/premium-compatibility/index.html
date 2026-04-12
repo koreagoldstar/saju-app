@@ -97,7 +97,7 @@
         <div>
           <p class="text-xs uppercase tracking-[0.2em] text-amber-200">Relationship Premium</p>
           <h1 class="mt-2 text-3xl font-bold text-stone-100">프리미엄 궁합 분석</h1>
-          <p class="mt-2 text-sm leading-6 text-stone-300">두 사람의 오행 균형과 충돌 요소를 분석해 관계 운용 전략을 제시합니다.</p>
+          <p class="mt-2 text-sm leading-6 text-stone-300">둘의 성향 차이를 쉬운 말로 짚고, 오늘부터 써먹을 대화·습관만 골라 담았어요.</p>
         </div>
       </div>
     </section>
@@ -157,11 +157,11 @@
         </div>
         <p id="summary" class="mt-3 rounded-lg bg-black/30 p-3 text-sm text-stone-200">입력 후 궁합 요약이 표시됩니다.</p>
         <div class="mt-3 rounded-lg bg-black/30 p-3">
-          <p class="text-xs text-amber-200">개운법</p>
+          <p class="text-xs text-amber-200">바로 써먹는 팁</p>
           <ul id="luck-tips" class="mt-2 space-y-1 text-xs text-stone-200"></ul>
         </div>
         <div class="mt-3 rounded-lg bg-black/30 p-3">
-          <p class="text-xs text-stone-400">오행 분석 레이더 (두 사람 비교)</p>
+          <p class="text-xs text-stone-400">다섯 가지 기운 비교 (목·화·토·금·수)</p>
           <canvas id="five-radar" class="mt-2" height="180"></canvas>
           <div class="mt-3 grid grid-cols-2 gap-2 text-[11px] text-stone-300">
             <p><span style="color:#22c55e">●</span> 목: 성장/확장</p>
@@ -172,7 +172,7 @@
           </div>
         </div>
         <div class="mt-3 rounded-lg bg-black/30 p-3">
-          <p class="text-xs text-stone-400">인생대운 흐름 그래프</p>
+          <p class="text-xs text-stone-400">인생 큰 국면 흐름 (참고용)</p>
           <canvas id="flow-line" class="mt-2" height="160"></canvas>
         </div>
         <div class="mt-3 rounded-lg bg-black/30 p-3">
@@ -243,7 +243,7 @@
             legend: { labels: { color: "#e5e7eb" } },
             tooltip: {
               callbacks: {
-                label: (ctx) => ctx.dataset.label + " · " + ctx.label + " 기운: " + ctx.parsed.r,
+                label: (ctx) => ctx.dataset.label + " · " + ctx.label + ": " + ctx.parsed.r,
               },
             },
           },
@@ -260,7 +260,7 @@
         data: {
           labels,
           datasets: [{
-            label: "내 인생대운 흐름",
+            label: "내 인생 큰 국면 흐름",
             data: values,
             borderColor: "#60a5fa",
             backgroundColor: "rgba(96,165,250,.2)",
@@ -275,8 +275,8 @@
             legend: { labels: { color: "#e5e7eb" } },
             tooltip: {
               callbacks: {
-                title: (items) => "대운 구간: " + (items[0] ? items[0].label : ""),
-                label: (ctx) => (ctx.dataIndex === currentIndex ? "현재 구간" : "흐름 지수") + ": " + ctx.parsed.y,
+                title: (items) => "나이 구간: " + (items[0] ? items[0].label : ""),
+                label: (ctx) => (ctx.dataIndex === currentIndex ? "지금 구간" : "흐름") + ": " + ctx.parsed.y,
               },
             },
           },
@@ -333,25 +333,25 @@
         "피해야 할 행동: " + (guide.avoid || "-"),
       ].join("\n");
       result.textContent =
-        (data.relationTypeLabel || "관계") + " 모드 감성 궁합 해석\n" +
+        "[" + (data.relationTypeLabel || "관계") + " 모드] 쉽게 보는 궁합\n" +
         (data.emotionalTone || "-") +
-        "\n\n관계의 강점\n" +
+        "\n\n잘 맞는 점\n" +
         (data.resonancePoint || "-") +
-        "\n\n주의 포인트\n" +
+        "\n\n조심하면 좋은 점\n" +
         (data.cautionPoint || "-") +
-        "\n\n관계 회복 루틴\n" +
+        "\n\n함께 하면 좋은 작은 루틴\n" +
         (data.careRitual || "-") +
-        "\n\n대화 가이드\n" +
+        "\n\n대화·습관 팁\n" +
         (data.conversationGuide || "-") +
-        "\n\n상대가 듣기 좋은 말 3개\n" +
+        "\n\n이렇게 말하면 부드러워요\n" +
         goodPhrases +
-        "\n\n피해야 할 말 3개\n" +
+        "\n\n이런 말은 잠깐 멈추면 좋아요\n" +
         avoidPhrases +
-        "\n\n개운법\n" +
+        "\n\n오늘·이번 주 팁\n" +
         luckTipText +
-        "\n\n오행 편차\n" +
+        "\n\n기운 차이(숫자)\n" +
         elementDiffText +
-        "\n\n충돌 요소\n" +
+        "\n\n차이가 큰 기운\n" +
         collisionsText;
       renderCharts(data);
     });
